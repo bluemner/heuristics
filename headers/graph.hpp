@@ -13,12 +13,12 @@ namespace betacore{
 			void parse_line(std::string &line){
 				std::stringstream sstream(line);
 				std::string item;
-				char type = NULL;
+				char type = 0;
 				std::vector<std::string> vals;
 
 
 				while (std::getline(sstream, item, ',')) {
-					if(type==NULL){
+					if(type==0){
 						type = item.at(0);
 					}else{
 						vals.push_back(item);
@@ -33,10 +33,9 @@ namespace betacore{
 					this->edges.push_back(edge);
 				}
 				else if(type ==  'N' || type =='n'){
-						add_node(Node<I>(
-							(I) std::stoll(vals.at(0),0,10),
-							 vals.at(1)
-							 ));
+						I id = (I) std::stoll(vals.at(0),0,10);
+						Node<I> node (id, vals.at(1) );
+						add_node(node);
 					
 				}
 

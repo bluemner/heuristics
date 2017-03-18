@@ -8,7 +8,7 @@ namespace betacore{
 		I id;
 		std::string name;
 		public:
-			Node(I id,std::string name){
+			Node(I &id,std::string &name){
 				this->id = id;
 				this->name = name;
 			}
