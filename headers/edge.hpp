@@ -5,6 +5,7 @@ namespace betacore{
 	template<typename T, typename I>
 	class Edge{
 		private:
+			I id;
 			I source;
 			I target;
 			T cost;

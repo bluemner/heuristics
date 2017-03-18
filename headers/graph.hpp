@@ -15,8 +15,6 @@ namespace betacore{
 				std::string item;
 				char type = 0;
 				std::vector<std::string> vals;
-
-
 				while (std::getline(sstream, item, ',')) {
 					if(type==0){
 						type = item.at(0);
@@ -36,15 +34,16 @@ namespace betacore{
 						I id = (I) std::stoll(vals.at(0),0,10);
 						Node<I> node (id, vals.at(1) );
 						add_node(node);
-					
 				}
 
 			}
 		public:
 			Graph(){}
-			void successor(Node<I> &node, std::vector<I> &result){
+
+			// &result result vector of neighbor ids
+			void successor(I &node, std::vector<I> &result){
 				for(auto e : edges){
-					if(e.get_source() == node.get_id() ){
+					if(e.get_source() == node ){
 						result.push_back(e.get_target());
 					}
 				}
@@ -74,15 +73,12 @@ namespace betacore{
 					while (std::getline(file, line))
 					{
 						parse_line(line);
-						//std::cout << line <<std::endl;
+						std::cout << line <<std::endl;
 					}
-				}
-				catch (const std::ifstream::failure& e) {
+				}catch (const std::ifstream::failure& e) {
 					std::cout << "Exception opening/reading file"<< e.what() <<std::endl;
 				}
-
 				file.close();
-
 			}
 	};
 }
