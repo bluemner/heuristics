@@ -41,10 +41,10 @@ namespace betacore{
 			Graph(){}
 
 			// &result result vector of neighbor ids
-			void successor(I &node, std::vector<I> &result){
+			void successor(I &node, std::vector<Edge<T,I>> &result){
 				for(auto e : edges){
 					if(e.get_source() == node ){
-						result.push_back(e.get_target());
+						result.push_back(e);
 					}
 				}
 			}

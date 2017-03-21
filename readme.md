@@ -21,4 +21,3 @@ type, arg_1, arg_2, ... , arg_n
 type,id,name
 #### Edge (type=E)
 type,source,target,cost
- 
