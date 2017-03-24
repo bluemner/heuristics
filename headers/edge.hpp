@@ -23,6 +23,9 @@ namespace betacore{
 			I get_target(){
 				return this->target;
 			}
+			T get_cost(){
+				return this->cost;
+			}
 	};
 }
 #endif

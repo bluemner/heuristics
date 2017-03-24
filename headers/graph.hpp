@@ -38,7 +38,9 @@ namespace betacore{
 
 			}
 		public:
-			Graph(){}
+			Graph(){
+
+			}
 
 			// &result result vector of neighbor ids
 			void successor(I &node, std::vector<Edge<T,I>> &result){
@@ -47,6 +49,9 @@ namespace betacore{
 						result.push_back(e);
 					}
 				}
+			}
+			void get_edges(std::vector<betacore::Edge<T,I>> &edges){
+					edges.push_back(this->edges);
 			}
 			Node<I> get_node(I id){
 				auto pred = [id](const Node<I> &item) {
@@ -79,6 +84,16 @@ namespace betacore{
 					std::cout << "Exception opening/reading file"<< e.what() <<std::endl;
 				}
 				file.close();
+			}
+			//Running time O(N)
+			T cost(I u, I ui){
+				for(auto e : this->edges){
+					if( e.get_source() == u && e.get_target() == ui){
+						
+						return e.get_cost();
+					}
+				}
+				return (T) 0.0;
 			}
 	};
 }
