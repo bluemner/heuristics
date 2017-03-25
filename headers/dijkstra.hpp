@@ -187,7 +187,121 @@ namespace betacore{
 					mp = path[mp];
 				}
 				std::cout<< source << std::endl;
+			}
+			
+						//
+			// Graph<T,I> &graph
+			// I &goal
+			//
+			void run (
+				I source,
+				std::vector<I> &goal_v,
+				std::map<I,I> &path,
+				std::function<T( I u, I ui)> &cost,
+				std::function<void(I &node, std::vector<Edge<T,I>> &result)> &Succ
+			 )
+			 {
+				I u;
+				T _cost = (T) std::numeric_limits<T>::max();
+				frontier.push(std::make_pair(0,source));
+				current.insert(source);
+				std::map<I,T> g;
+				g[source] =(T) 0;
+				I _goal = goal_v.at(0);
+				while(!frontier.empty()){
+					if( frontier.empty() ){
+						std::cerr<<"The fronter is empty, how can this be?"<<std::endl;;
+						throw Dijkstra_Exception();
+					}
+					u = std::get<1>(frontier.top()); // get next node
+					std::cout<<"Node U::"<< u<<std::endl;
+						frontier.pop(); // move remove the next from the que
 
+					if(current.find(u)!= current.end())
+						current.erase(current.find(u));
+					//if u is the goal is it has a smaller cost
+					for(auto goal : goal_v){
+						if( u == goal && g[goal]< _cost)
+						{
+							std::cout<< "Goal Found" <<std::endl;
+							_cost = g[goal];
+							_goal = goal;
+						}
+					}
+					// this stop exploration 
+					if(_cost< g[u]){
+						break;
+					}
+
+					if(g.find(u) == g.end()){
+						std::cerr<<"The weight is unkown, how can this be?"<<std::endl;;
+						throw Dijkstra_Exception();
+					}
+
+					explored.insert(u);
+					std::vector<Edge<T,I>> successor;
+
+					// Get successor
+					//graph.successor(u, successor);
+					Succ(u,successor);
+					for ( auto s : successor ) {
+						I ui = s.get_target();//.get_id();
+						// ui not in E and ui not in f
+						if(explored.find(ui) == explored.end() && current.find(ui) == current.end())
+						{
+								g[ui]= g[u] + cost(u,ui);
+								if(g[ui]> _cost){ // if we have our goal then we see if any paths can be added 
+									continue;
+								}
+								//frontier.push(ui);
+								frontier.push(std::make_pair(g[ui],ui));
+								current.insert(ui);
+								path[ui]=u;
+								std::cout<<"Adding to frontier edge:"<<ui <<" cost:"<< g[ui]<<std::endl;
+							
+						}
+						// ui in F
+						else if(current.find(ui) != current.end()){
+							if( g[u] + cost(u,ui) < g[ui] ){
+								g[ui] = g[u] + cost(u,ui);
+								path[ui] = u;
+								std::cout<<"+adding edge:"<<u <<" cost:"<< g[ui]<<std::endl; 
+							}
+						}
+						// ui in E
+						else if(explored.find(ui) != explored.end())
+						{
+							if( g[u] + cost(u,ui) < g[ui] ){
+								explored.erase(explored.find(ui));
+								//frontier.push(ui);
+								frontier.push(std::make_pair(g[ui],ui));
+								current.insert(source);
+							std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<std::endl; 
+							}
+						}else{
+							std::cerr<< "bug"<<std::endl;
+						}
+					}
+				}//while(true);
+
+				for(auto e: explored){
+					std::cout<< "explored node:"<< e <<std::endl;
+				}
+				for(auto c: current){
+						std::cout<< "frontier node:"<< c <<std::endl;
+				}
+				u = _goal;
+				I mp = path[u];
+				std::cout<< u <<"<-";
+				while (mp !=source){
+					if(!path.count(mp)){
+						std::cerr<<"Path from sink doesn't lead back to source" <<std::endl;
+						throw Dijkstra_Exception();
+					}
+					std::cout<< mp <<"<-";
+					mp = path[mp];
+				}
+				std::cout<< source << std::endl;
 			}
 	};
 }

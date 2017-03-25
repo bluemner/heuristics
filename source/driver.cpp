@@ -43,9 +43,24 @@ int main (int argc, char * argv[]){
 		std::function<T( I u , I ui)> cost_function = cost;
 		std::function<void(I &, std::vector<betacore::Edge<T,I>> &)> successor_function = successor;
 	
+		try{
+			dijkstra.run(source,1,path,cost_function,successor_function);
+		}catch(const std::exception& e){
 
-		dijkstra.run(source,5,path,cost_function,successor_function);
-
+		}
+		path.clear();
+		try{
+			dijkstra.run(source,9,path,cost_function,successor_function);
+		}catch(const std::exception& e){
+			
+		}
+			path.clear();
+		try{
+			std::vector<I> targets={1,9};
+			dijkstra.run(source,targets,path);
+		}catch(const std::exception& e){
+			
+		}
 	}
 	std::cout<<"_______________________________________________________________"<<std::endl;
 	return 0;
