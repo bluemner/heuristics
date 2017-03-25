@@ -5,8 +5,10 @@
 #include "../headers/edge.hpp"
 #include "../headers/graph.hpp"
 
+// The evil's of c++ templates
 typedef double T;
 typedef long long I;
+
 betacore::Graph<T, I> G;
 betacore::Dijkstra<T,I> dijkstra;
 
@@ -23,23 +25,26 @@ int main (int argc, char * argv[]){
 	std::cout<<"_______________________________________________________________"<<std::endl;
 	std::cout<<"Heuristics"<<std::endl;
 	std::cout<<"_______________________________________________________________"<<std::endl;
-	if(argc < 2){
-		std::cout<< "Usage:\n" << "\tPlease Provide path to graph .csv" <<std::endl;
+	if(argc < 3){
+		std::cout<< "Usage:\n" << "\tPlease Provide path to graph .csv\n\tPlease provide a source id" <<std::endl;
 	}
 	else
 	{
 		std::string file_path(argv[1]);
+		I source = (I) std::stoll(argv[2],0,10);
 		std::cout << file_path << std::endl;
 		
 		G.load_from_file(file_path);	
-
+		std::cout<<"_______________________________________________________________"<<std::endl;
+		G.print();
+		std::cout<<"_______________________________________________________________"<<std::endl;
 		std::map<I,I> path;
 
 		std::function<T( I u , I ui)> cost_function = cost;
 		std::function<void(I &, std::vector<betacore::Edge<T,I>> &)> successor_function = successor;
 	
 
-		dijkstra.run(1,5,path,cost_function,successor_function);
+		dijkstra.run(source,5,path,cost_function,successor_function);
 
 	}
 	std::cout<<"_______________________________________________________________"<<std::endl;

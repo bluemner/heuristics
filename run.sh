@@ -1,1 +1,1 @@
-clear && make && ./bin/driver.o ./data/graph_01.csv
+clear && make && ./bin/driver.o ./data/graph_01.csv 1

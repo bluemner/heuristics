@@ -1,9 +1,31 @@
+/** MIT License
+
+	Copyright (c) 2017 Brandon Bluemner
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+ */
 #ifndef _betacore_graph_hpp_
 #define _betacore_graph_hpp_
 #include "./node.hpp"
 #include "./edge.hpp"
 #include <vector>
-
+#include <iostream>
 namespace betacore{
 	template<typename T, typename I>
 	class Graph{
@@ -85,6 +107,7 @@ namespace betacore{
 				}
 				file.close();
 			}
+
 			//Running time O(N)
 			T cost(I u, I ui){
 				for(auto e : this->edges){
@@ -94,6 +117,14 @@ namespace betacore{
 					}
 				}
 				return (T) 0.0;
+			}
+			void print(){
+				for(auto e : this->edges){
+					std::cout<< "Edge:" << e.get_source() << "->" << e.get_target() << " cost:"<< e.get_cost() << std::endl;
+				}
+				for(auto n : this->nodes){
+					std::cout<<"Nodes:" <<n.get_id() << std::endl;
+				}
 			}
 	};
 }
