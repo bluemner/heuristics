@@ -22,7 +22,7 @@
 *.a
 *.lib
 
-# Executables
+# Executable
 *.exe
 *.out
 *.app
@@ -38,3 +38,11 @@ bin/
 
 #windows debug
 *.pdb
+
+#laytex
+*.aux
+*.dvi
+*.log
+*.pdf
+*.bbl
+*.blg

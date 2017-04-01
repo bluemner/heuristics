@@ -1,0 +1,201 @@
+\documentclass[12pt]{article}
+\usepackage[]{algorithm2e}
+\usepackage{ amssymb }
+\usepackage{amsmath}
+\usepackage[hyphens]{url}
+\usepackage{listings}
+\usepackage{xcolor}
+
+
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=4,
+	language=C++,
+	captionpos=b,
+	tabsize=3,
+	frame=lines,
+	numbers=left,
+	numberstyle=\tiny,
+	numbersep=5pt,
+	breaklines=true,
+	showstringspaces=false,
+	basicstyle=\footnotesize,
+	%  identifierstyle=\color{magenta},
+	keywordstyle=\color[rgb]{0,0,1},
+	commentstyle=\color{Darkgreen},
+	stringstyle=\color{red}
+}
+
+\begin{document}
+
+
+
+
+\title{Project 01 CS-790}
+\author{Brandon Bluemner}
+\date{2017}
+\maketitle
+% //Start
+\begin{abstract}
+Analysis and of c++11 implementation of Dijkstra's algorithm
+\end{abstract}
+% ==========================================================================================================================
+%  Algorithm Section 1
+% ==========================================================================================================================
+\section[Algorithm]{Algorithm}
+
+\begin{algorithm}
+
+\KwData{  \textit{source:} source node, \textit{$goal_v$:} collection or goals,\\ \textit{cost:} function that returns cost between edge $u \to u_i$, \\ \textit{succ:} function that returns the neighbors of node u   }
+\KwResult{ \textit{path:} collection to store path in}
+\SetKwProg{Fn}{Function}{}{}
+\Fn{run(source, $goal_v$, path, cost, succ)}{
+	$I$ u;
+	$T$ \_cost $\leftarrow \infty$;
+	$frontier.push( {0,source})$ // priority que \\
+	$current.insert(source)$ //keep track of current node in frontier \\
+	$map<I,T> g $ // This will keep track of cost for node I cost T\\
+	$g[source]$  $\leftarrow$  0;
+	$I _goal$ $\leftarrow goal_v.at(0)$\\
+	\While{ $frontier.empty() = false$}{
+		$u$ $\leftarrow$ frontier.top() // get next node \\
+		$frontier.pop()$  // move remove the next from the que \\
+		$current.erase(current.find(u))$ // remove u from current \\		
+		\For{$auto goal$ $\in$ $goal_v$}{ 
+			\If{$ u = goal$ and $g[goal]<$\_cost}{
+				\_cost  $\leftarrow g[goal]$;
+				\_goal  $\leftarrow goal$ \\
+			}
+		}
+		$explored.insert(u)$;
+		$vector<Edge> successor$; $ succ(u,successor)$;
+		\\
+			\For{$ auto$ $s : successor $} {
+				$I ui \leftarrow s.get_target()$\\
+				// ui not in E and ui not in f\\
+				\If{$explored.find(ui) = explored.end() and current.find(ui) = current.end()$}{
+						$g[ui] \leftarrow g[u] + cost(u,ui) frontier.push({g[ui],ui})$\\
+						$current.insert(ui)$;
+						$path[ui] \leftarrow u$
+				}					
+				\ElseIf{$current.find(ui) \neq current.end()$}{
+					\If{ $g[u] + cost(u,ui) < g[ui]$ }{
+						$g[ui] \leftarrow g[u] + cost(u,ui)$;
+						$path[ui] \leftarrow u$
+					}
+				}				
+				\ElseIf{$explored.find(ui) \neq explored.end()$}
+				{
+					\If{ $g[u] + cost(u,ui) < g[ui] $}{
+						$explored.erase(explored.find(ui))$;
+						$frontier.push({g[ui],ui})$;
+						$current.insert(source)$;
+					}
+				}
+		}
+	}
+}
+\end{algorithm}
+\clearpage
+% ==========================================================================================================================
+%  Implementation Section 2
+% ==========================================================================================================================
+\section[Implementation]{Implementation}
+\subsection{std::vector}
+Implementation uses c++11 standard library
+\begin{lstlisting}
+	template<
+    class T,
+    class Allocator = std::allocator<T>
+> class vector;
+\end{lstlisting}
+\begin{tabular}{ l l l }
+\textbf{Constructors} & \textbf{Description} & \textbf{Big - OH}\\
+vector$<$T$>$ v; & Make an empty vector. & O(1)\\
+vector$<$T$>$ v(n); & Make a vector with N elements. & O(n)\\
+vector$<$T$>$ v(n, value); & Make a vector with N elements, initialized to value. & O(n)\\
+vector$<$T$>$ v(begin, end); & Make a vector and copy the elements from begin to end & O(n)\\
+\end{tabular}
+\\
+\\
+\\
+\begin{tabular}{ l l l }
+\textbf{Accessors} & \textbf{Description} & \textbf{Big - OH}\\
+v[i]; & Return (or set) the I'th element. & O(1)\\
+v.at(i); & Return (or set) the I'th element, with bounds checking. & O(1)\\
+v.size(); & Return current number of elements. & O(1)\\
+v.empty(); & Return true if vector is empty. & O(1)\\
+v.begin(); & Return random access iterator to start. & O(1)\\
+v.end(); & Return random access iterator to end. & O(1)\\
+v.front(); & Return the first element. & O(1)\\
+v.back(); & Return the last element. & O(1)\\
+v.capacity(); & Return maximum number of elements. & O(1)\\
+\end{tabular}
+\\
+\\
+\\
+\begin{tabular}{ l l l }
+\textbf{Modifiers} & \textbf{Description} & \textbf{Big - OH}\\
+v.push\_back(value); & Add value to end. & O(1) (amortized)\\
+v.insert(iterator, value); & Insert value at the position indexed by iterator. & O(n)\\
+v.pop\_back(); & Remove value from end. & O(1)\\
+v.erase(iterator); & Erase value indexed by iterator. & O(n)\\
+v.erase(begin, end); & Erase the elements from begin to end & O(n)\\
+\end{tabular}
+\clearpage
+\subsection{std::priority\_queue}
+
+$priority\_queue<T,  container<T>,  comparison<T> > q;$\\
+ Make an empty priority queue using the given container to hold values and 
+ comparison to compare values. container defaults to $vector<T>$ and comparison defaults $toless<T>$ O(1)\\
+\\
+\\
+\\
+\begin{tabular}{ l l l }
+\textbf{Accessors} & \textbf{Description} & \textbf{Big - OH}\\
+q.top(); & Return the ``biggest'' element. & O(1)\\
+q.size(); & Return current number of elements. & O(1)\\
+q.empty(); & Return true if priority queue is empty. & O(1)
+\end{tabular}
+\\
+\\
+\\
+\begin{tabular}{ l l l }
+\textbf{Modifiers} & \textbf{Description} & \textbf{Big - OH}\\
+q.push(value); & Add value to priority queue. & O(log n)\\
+q.pop(); & Remove biggest value. & O(log n)\\
+\end{tabular}
+\clearpage
+\subsection{std::set}
+\begin{tabular}{ p{5cm} p{7cm} p{5cm}}
+\textbf{Constructors} & \textbf{Description} & \textbf{Big - OH}\\
+set $<$type, compare$>$ s; & Make an empty set. compare should be a binary predicate for ordering the set. It's optional and will default to a function that uses operator$<$. & O(1)\\
+set $<$type, compare$>$ s(begin, end); & Make a set and copy the values from begin to end. & O(n log n)
+\end{tabular}
+\\
+\\
+\\
+\begin{tabular}{ p{5cm} p{7cm}  p{5cm}}
+\textbf{Modifiers} & \textbf{Description} & \textbf{Big - OH}\\
+s.find(key) & Return an iterator pointing to an occurrence of key in s, or s.end() if key is not in s. & O(log n)\\
+s.lower\_bound(key) & Return an iterator pointing to the first occurrence of  an item in s not less than key, or s.end() if no such item is found. & O(log n)\\
+s.upper\_bound(key) & Return an iterator pointing to the first occurrence of  an item greater than key in s, or s.end() if no such item is found. & O(log n)\\
+s.equal\_range(key) & Returns pair$<$lower\_bound(key), upper\_bound(key)$>$. & O(log n)\\
+s.count(key) & Returns the number of items equal to key in s. & O(log n)\\
+s.size() & Return current number of elements. & O(1)\\
+s.empty() & Return true if set is empty. & O(1)\\
+s.begin() & Return an iterator pointing to the first element. & O(1)\\
+s.end() & Return an iterator pointing one past the last element. & O(1)
+\end{tabular}
+
+% ==========================================================================================================================
+%  Proof of correctness Section 3
+% ==========================================================================================================================
+\section[Proof of correctness]{Proof of correctness}
+% //END
+
+\bibliographystyle{unsrt}
+\bibliography{bib}
+\end{document}*
