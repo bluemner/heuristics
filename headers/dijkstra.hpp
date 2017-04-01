@@ -289,10 +289,11 @@ namespace betacore{
 						}
 					}
 				}//while(true);
-
+				std::cout<< "explored node count:"<< explored.size() <<"\n";
 				for(auto e: explored){
 					std::cout<< "explored node:"<< e <<"\n";
 				}
+				std::cout<< "frontier node count:"<< current.size() <<"\n";
 				for(auto c: current){
 					std::cout<< "frontier node:"<< c <<"\n";
 				}
