@@ -209,10 +209,10 @@ namespace betacore{
 				g[source] =(T) 0;
 				I _goal = goal_v.at(0);
 				while(!frontier.empty()){
-					if( frontier.empty() ){
-						std::cerr<<"The fronter is empty, how can this be?"<<std::endl;;
-						throw Dijkstra_Exception();
-					}
+					// if( frontier.empty() ){
+					// 	std::cerr<<"The fronter is empty, how can this be?"<<std::endl;;
+					// 	throw Dijkstra_Exception();
+					// }
 					u = std::get<1>(frontier.top()); // get next node
 					std::cout<<"Node U::"<< u<<std::endl;
 						frontier.pop(); // move remove the next from the que
@@ -228,10 +228,10 @@ namespace betacore{
 							_goal = goal;
 						}
 					}
-					// this stop exploration 
-					if(_cost< g[u]){
-						break;
-					}
+					// this stop exploration (if positive only)
+					//if(_cost< g[u]){
+					//	break;
+					//}
 
 					if(g.find(u) == g.end()){
 						std::cerr<<"The weight is unkown, how can this be?"<<std::endl;;
