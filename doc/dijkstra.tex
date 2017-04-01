@@ -6,7 +6,6 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
-
 \definecolor{listinggray}{gray}{0.9}
 \definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
 \lstset{
@@ -39,13 +38,13 @@
 \maketitle
 % //Start
 \begin{abstract}
-Analysis and of c++11 implementation of Dijkstra's algorithm
+Analysis and of c++11 implementation of Dijkstra's algorithm. 
+
 \end{abstract}
 % ==========================================================================================================================
 %  Algorithm Section 1
 % ==========================================================================================================================
 \section[Algorithm]{Algorithm}
-
 \begin{algorithm}
 
 \KwData{  \textit{source:} source node, \textit{$goal_v$:} collection or goals,\\ \textit{cost:} function that returns cost between edge $u \to u_i$, \\ \textit{succ:} function that returns the neighbors of node u   }
@@ -103,8 +102,13 @@ Analysis and of c++11 implementation of Dijkstra's algorithm
 %  Implementation Section 2
 % ==========================================================================================================================
 \section[Implementation]{Implementation}
+The implementation of Dijkstra utilizes several of the c++11 standard library. c++11
+included several enhancements to the predefined data structures since the last revision. Below is how the
+ data structures are defined and the running time of their 
+%----------------------------------------
+%	Std::Vector
+% ---------------------------------------
 \subsection{std::vector}
-Implementation uses c++11 standard library
 \begin{lstlisting}
 	template<
     class T,
@@ -145,11 +149,13 @@ v.erase(iterator); & Erase value indexed by iterator. & O(n)\\
 v.erase(begin, end); & Erase the elements from begin to end & O(n)\\
 \end{tabular}
 \clearpage
-\subsection{std::priority\_queue}
-
-$priority\_queue<T,  container<T>,  comparison<T> > q;$\\
- Make an empty priority queue using the given container to hold values and 
- comparison to compare values. container defaults to $vector<T>$ and comparison defaults $toless<T>$ O(1)\\
+%----------------------------------------
+%	Std::priority queue
+% ---------------------------------------
+\subsection{std::priority\_queue}\label{pq}
+\begin{tabular}{ p{5cm} p{7cm} p{5cm}}
+\textbf{Constructors} & \textbf{Description} & \textbf{Big - OH}\\
+priority\_queue$<$T,  container$<$T$>$,  comparison$<$T$>$ $>$ q & Make an empty priority queue using the given container to hold values, and comparison to compare values. container defaults to vector$<$T$>$ and comparison defaults to less$<$T$>$. & O(1)\end{tabular}
 \\
 \\
 \\
@@ -168,7 +174,10 @@ q.push(value); & Add value to priority queue. & O(log n)\\
 q.pop(); & Remove biggest value. & O(log n)\\
 \end{tabular}
 \clearpage
-\subsection{std::set}
+%----------------------------------------
+%	Std::Set
+% ---------------------------------------
+\subsection{std::set} \label{stdset}
 \begin{tabular}{ p{5cm} p{7cm} p{5cm}}
 \textbf{Constructors} & \textbf{Description} & \textbf{Big - OH}\\
 set $<$type, compare$>$ s; & Make an empty set. compare should be a binary predicate for ordering the set. It's optional and will default to a function that uses operator$<$. & O(1)\\
@@ -189,6 +198,152 @@ s.empty() & Return true if set is empty. & O(1)\\
 s.begin() & Return an iterator pointing to the first element. & O(1)\\
 s.end() & Return an iterator pointing one past the last element. & O(1)
 \end{tabular}
+\clearpage
+%----------------------------------------
+%	Std::Map
+% ---------------------------------------
+\subsection{std::Map}
+\begin{tabular}{ p{5cm} p{7cm}  p{5cm} }
+\textbf{Constructors} & \textbf{Description} & \textbf{Big - OH}\\
+map$<$ key\_type, value\_type, key\_compare $>$ m; & Make an empty map. key\_compare should be a binary predicate for ordering the keys. It's optional and will default to a function that uses operator$<$. & O(1)\\
+map$<$ key\_type, value\_type, key\_compare $>$ m(begin, end); & Make a map and copy the values from begin to end. & O(n log n)
+\end{tabular}
+\\
+\\
+\\
+\begin{tabular}{ p{5cm} p{7cm}  p{5cm} }
+\textbf{Accessors} & \textbf{Description} & \textbf{Big - OH}\\
+m[key] & Return the value stored for key. This adds a default value if key not in map. & O(log n)\\
+m.find(key) & Return an iterator pointing to a key-value pair, or m.end() if key is not in map. & O(log n)\\
+m.lower\_bound(key) & Return an iterator pointing to the first pair containing key, or m.end() if key is not in map. & O(log n)\\
+m.upper\_bound(key) & Return an iterator pointing one past the last pair containing key, or m.end() if key is not in map. & O(log n)\\
+m.equal\_range(key) & Return a pair containing the lower and upper bounds for key. This may be more efficient than calling those functions separately. & O(log n)\\
+m.size(); & Return current number of elements. & O(1)\\
+m.empty(); & Return true if map is empty. & O(1)\\
+m.begin() & Return an iterator pointing to the first pair. & O(1)\\
+m.end() & Return an iterator pointing one past the last pair. & O(1) n)
+\end{tabular}
+\\
+\\
+\\
+\begin{tabular}{ p{5cm} p{7cm}  p{5cm} }
+\textbf{Modifiers} & \textbf{Description} & \textbf{Big - OH}\\
+m[key] = value; & Store value under key in map. & O(log n)\\
+m.insert(pair) & Inserts the <key, value> pair into the map. Equivalent to the above operation. & O(log n)
+\end{tabular}
+\subsection{std::pair}
+\begin{tabular}{ p{5cm} p{10cm} }
+default (1) & constexpr pair\\
+copy / move (2) & template$<$class U, class V$>$ pair (const pair$<$U,V$>$\& pr);
+					template$<$class U, class V$>$ pair (pair$<$U,V$>$\&\& pr);
+					pair (const pair\& pr) = default;
+					pair (pair\&\& pr) = default;\\
+initialization (3) & pair (const first\_type\& a, const second\_type\& b);
+					template$<$class U, class V$>$ pair (U\&\& a, V\&\& b);\\
+piecewise (4) &		
+					template $<$class... Args1, class... Args2$>$
+  					pair (piecewise\_construct\_t pwc, tuple$<$Args1...$>$ first\_args,
+                                   tuple$<$Args2...$>$ second\_args);
+					
+					
+\end{tabular}
+\begin{lstlisting}
+
+template <class T1,class T2>
+  pair<T1,T2> make_pair (T1 x, T2 y)
+  {
+    return ( pair<T1,T2>(x,y) );
+  }
+\end{lstlisting}
+%----------------------------------------
+%	Betacore::Map
+% ---------------------------------------
+\subsection{Betacore::Graph}
+\begin{lstlisting}
+	template<typename T, typename I>
+	class Graph{
+		private:
+			std::vector<betacore::Node<I>> nodes
+			std::vector<betacore::Edge<T,I>> edges
+			betacore::Node<I> * source
+			std::vector<betacore::Node<I>> targets
+			void parse_line(std::string &line)
+		public:
+			Graph()
+			void successor(I &node, std::vector<Edge<T,I>> &result)
+			void get_edges(std::vector<betacore::Edge<T,I>> &edges)
+			Node<I> get_node(I id)
+			void add_node(Node<I> &node)
+			void remove_node(I id)
+			load_from_file(std::string file_path)
+			T cost(I u, I ui)
+			void print()
+	};
+\end{lstlisting}
+
+Betacore::graph is an implementation of a directed graph that reads from a
+modified comma delimited file. This allows for the graph state to change
+without recompiling the code, however this is a potential bottleneck due to
+the read speed of a hard disk. (for larger gig size files this should be
+be modified to a stream and the graph split up into regions.then each region
+only when need thus saving memory ). 
+
+Template$<$typename T, typename I$>$ allows the precision of the graph type to 
+be determined by the implementation. T being a float, double, or long double
+used for floating point arithmetic. I being a char, int, long, long long int is
+used for indexing the nodes. Depending on the size of the graph changing the 
+data types for T and I can have a performance and precision impact on the graph.
+
+%----------------------------------------
+%	Betacore::Dijkstra
+% ---------------------------------------
+\subsection{Betacore::Dijkstra}
+\begin{lstlisting}
+	struct Dijkstra_Exception : public std::exception {
+		const char * what () const throw () {
+			return "Dijkstra Exception";
+		}
+	};
+
+	template<typename T, typename I>
+	class Dijkstra{
+		private:
+			std::priority_queue<std::pair<T,I>,std::vector<std::pair<T,I>>, std::greater<std::pair<T,I>> > frontier;
+			std::set<I> current; 
+			std::set<I> explored;
+			T cost();
+		public:
+			Dijkstra(){
+			}
+			~Dijkstra(){
+			}
+		
+			void run (
+				I source,
+				I goal,
+				std::map<I,I> &path,
+				std::function<T( I u, I ui)> &cost,
+				std::function<void(I &node, std::vector<Edge<T,I>> &result)> &Succ
+			 );
+		
+			void run (
+				I source,
+				std::vector<I> &goal_v,
+				std::map<I,I> &path,
+				std::function<T( I u, I ui)> &cost,
+				std::function<void(I &node, std::vector<Edge<T,I>> &result)> &Succ
+			 );
+	
+	};
+\end{lstlisting}
+
+Betacore::Dijkstra implementation has utilizes the std::priority\_queue (see section \ref{pq}).
+The priority\_queue uses the std::greater function which set the que by the value in edge cost$<$T$>$. We want grater
+so the value in first position will be the smallest, thus the shortest edge$<$T$>$. 
+Limitation of using std::priority\_queue is that their is no contains method. That 
+problem is overcome by keeping a std::set (see section \ref{stdset}) to keep track of nodes in the frontier.
+So the std::priority\_queue frontier keeps the order of the edges and std::set current keeps track of the contains.
+This adds double space complexity but saves from have to implement a new child class of std::priority\_queue.
 
 % ==========================================================================================================================
 %  Proof of correctness Section 3
@@ -198,4 +353,4 @@ s.end() & Return an iterator pointing one past the last element. & O(1)
 
 \bibliographystyle{unsrt}
 \bibliography{bib}
-\end{document}*
+\end{document}

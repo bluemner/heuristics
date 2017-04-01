@@ -48,6 +48,9 @@
 		"map": "cpp",
 		"tuple": "cpp",
 		"functional": "cpp",
-		"xfunctional": "cpp"
+		"xfunctional": "cpp",
+		"chrono": "cpp",
+		"ctime": "cpp",
+		"ratio": "cpp"
 	}
 }

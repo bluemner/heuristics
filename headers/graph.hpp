@@ -32,8 +32,8 @@ namespace betacore{
 		private:
 			std::vector<betacore::Node<I>> nodes;
 			std::vector<betacore::Edge<T,I>> edges;
-			std::Node<I> source;
-			std::vector<betacore::Node<I>> targets;
+			betacore::Node<I> * source;
+			std::vector<I> targets;
 			void parse_line(std::string &line){
 				std::stringstream sstream(line);
 				std::string item;
@@ -61,19 +61,25 @@ namespace betacore{
 				}
 				else if(type ==  'T' || type =='t'){
 						I id = (I) std::stoll(vals.at(0),0,10);
-						Node<I> node (id, vals.at(1) );
-						targets.push_back(node);
+						//Node<I> node (id, vals.at(1) );
+						targets.push_back(id);
 				}
 				else if(type ==  'S' || type =='s'){
 						I id = (I) std::stoll(vals.at(0),0,10);
-						Node<I> node (id, vals.at(1) );
-						source=node;
+						source= new Node<I> (id, vals.at(1) );
+
 				}
 
 			}
 		public:
 			Graph(){
-
+				source = nullptr;
+			}
+			~Graph(){
+				if(source != nullptr){
+					delete source;
+					source = nullptr;
+				}
 			}
 
 			// &result result vector of neighbor ids
@@ -118,6 +124,13 @@ namespace betacore{
 					std::cout << "Exception opening/reading file"<< e.what() <<std::endl;
 				}
 				file.close();
+			}
+			I get_source(){
+				return this->source->get_id();
+			}
+
+			void get_targets(std::vector<I> &targets){
+				targets.insert(std::end(targets), std::begin(this->targets), std::end(this->targets));
 			}
 
 			//Running time O(N)
