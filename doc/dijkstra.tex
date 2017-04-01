@@ -29,9 +29,6 @@
 
 \begin{document}
 
-
-
-
 \title{Project 01 CS-790}
 \author{Brandon Bluemner}
 \date{2017}
@@ -256,7 +253,7 @@ template <class T1,class T2>
   }
 \end{lstlisting}
 %----------------------------------------
-%	Betacore::Map
+%	Betacore::Graph
 % ---------------------------------------
 \subsection{Betacore::Graph}
 \begin{lstlisting}
@@ -343,14 +340,235 @@ so the value in first position will be the smallest, thus the shortest edge$<$T$
 Limitation of using std::priority\_queue is that their is no contains method. That 
 problem is overcome by keeping a std::set (see section \ref{stdset}) to keep track of nodes in the frontier.
 So the std::priority\_queue frontier keeps the order of the edges and std::set current keeps track of the contains.
-This adds double space complexity but saves from have to implement a new child class of std::priority\_queue.
-
+This adds double space complexity but saves from have to implement a new child class of std::priority\_queue. Nodes 
+are know by their index type I and the edges edges by the edge class.
+\\
+\\
+\begin{lstlisting}
+	std::function<T( I u, I ui)> &cost
+\end{lstlisting}
+This function passed into the algorithm determines the cost from node $u \to u_i$ and 
+must be provided by the user and allows for the most flexibility.
+\\
+\begin{lstlisting}
+	std::function<void(I &node, std::vector<Edge<T,I>> &result)> &Succ
+\end{lstlisting}
+This function passed into the algorithm determines then neighbors nodes of $u$ and
+stores the result into a std::vector \&result. To change the implement just make sure
+that you add the Edge$<$T,I$>$ index I do the vector list.
 % ==========================================================================================================================
 %  Proof of correctness Section 3
 % ==========================================================================================================================
-\section[Proof of correctness]{Proof of correctness}
+
+% \section[Proof of correctness]{Proof of correctness}
+\section{Proof of correctness}
+
+\subsection{Flight Plans}
+
+\subsection{Missionaries and Cannibals}
+With run of $n=3$ and $m=2$ \\
+The graph in the format:\\
+Each node represents the following\\
+
+N: Type of node\\
+
+\#: id of the node\\
+
+Name: LHS(Missionaries\_Cannibals)::Boat(Missionaries\_Cannibals)::RHS(Missionaries\_Cannibals)\\
+\\
+Each Edge is source, target, cost\\
+Boat move from LHS $\to$ RHS
+\begin{lstlisting}
+	File grap_can_n_3_m_2.csv:
+	N,0,N::3_2::0_0::0_0
+	N,1,N::2_1::1_1::0_0
+	N,2,N::3_0::0_2::0_0
+	N,3,N::1_2::2_0::0_0
+	N,4,N::2_1::0_1::1_0
+	N,5,N::2_1::1_0::0_1
+	N,6,N::2_0::0_1::0_1
+	N,7,N::3_0::0_1::0_1
+	N,8,N::1_1::1_1::1_0
+	N,9,N::2_0::0_2::1_0
+	N,10,N::2_0::1_1::0_1
+	N,11,N::1_1::2_0::0_1
+	N,12,N::1_1::0_1::2_0
+	N,13,N::1_1::1_0::1_1
+	N,14,N::2_0::0_1::1_1
+	N,15,N::2_0::1_0::0_2
+	N,16,N::1_0::2_0::0_1
+	N,17,N::1_0::1_1::2_0
+	N,18,N::1_0::0_2::2_0
+	N,19,N::1_0::0_1::2_1
+	N,20,N::0_1::0_1::3_0
+	N,21,N::1_0::1_0::1_2
+	N,22,N::0_0::1_1::2_1
+	N,23,N::0_0_::0_2::3_0
+	N,24,N::0_0::0_0::3_2
+	E,0,1,1
+	E,0,2,1
+	E,0,3,1
+	E,1,4,1
+	E,1,5,1
+	E,2,6,1
+	E,4,7,1
+	E,4,8,1
+	E,5,9,1
+	E,5,10,1
+	E,6,9,1
+	E,7,11,1
+	E,7,12,1
+	E,8,13,1
+	E,9,13,1
+	E,11,15,1
+	E,11,16,1
+	E,12,16,1
+	E,13,17,1
+	E,14,18,1
+	E,15,19,1
+	E,16,20,1
+	E,17,19,1
+	E,17,21,1
+	E,18,21,1
+	E,19,22,1
+	E,20,23,1
+	E,22,24,1
+	E,23,24,1
+	S,0,N::3_2::0_0::0_0
+	T,24,N::0_0::0_0::3_2
+\end{lstlisting}
+
+With run of $n=4$ and $m=3$ 
+The graph in the format:\\
+Each node represents the following\\
+
+N: Type of node\\
+
+\#: id of the node\\
+
+Name: LHS(Missionaries\_Cannibals)::Boat(Missionaries\_Cannibals)::RHS(Missionaries\_Cannibals)\\
+\\
+Each Edge is source, target, cost\\
+Boat move from LHS $\to$ RHS
+\begin{lstlisting}
+File grap_can_n_4_m_3.csv:
+N,0,4_3::0_0::0_0
+N,1,3_2::1_1::0_0
+N,2,4_1::0_2::0_0
+N,3,2_3::2_0::0_0
+N,4,3_2::1_0::0_1
+N,5,3_2::0_1::1_0
+N,6,4_1::0_1::0_1
+N,7,3_1::1_1::0_1
+N,8,2_2::2_0::0_1
+N,9,2_2::1_1::1_0
+N,10,3_1::0_2::1_0
+N,11,4_0::0_2::0_1
+N,12,3_1::1_0::0_2
+N,13,3_1::0_1::1_1
+N,14,2_2::1_0::1_1
+N,15,2_2::0_1::2_0
+N,16,4_0::0_1::0_2
+N,17,2_1::2_0::0_2
+N,18,3_0::1_1::0_2
+N,19,3_0::0_2::1_1
+N,20,2_1::1_1::1_1
+N,21,1_2::2_0::1_1
+N,22,2_1::0_2::2_0
+N,23,2_1::1_0::1_2
+N,24,3_0::1_0::0_3
+N,25,3_0::0_1::1_2
+N,26,2_1::0_1::2_1
+N,27,2_1::1_0::1_2
+N,28,2_0::2_0::0_3
+N,29,2_0::0_2::2_1
+N,30,1_1::1_1::2_1
+N,31,2_0::1_0::1_3
+N,32,2_0::0_1::2_2
+N,33,1_1::0_1::3_1
+N,34,1_1::1_0::2_2
+N,35,1_0::1_1::2_2
+N,36,1_0::0_2::3_1
+N,37,0_1::1_1::3_1
+N,38,0_1::2_0::2_2
+N,39,1_0::1_0::2_3
+N,40,1_0::0_1::3_2
+N,41,0_1::1_0::3_2
+N,42,0_1::0_1::4_1
+N,43,0_0::1_1::3_2
+N,44,0_0::0_2::4_1
+N,45,0_0::0_0::4_3
+E,0,1,1
+E,0,2,1
+E,0,3,1
+E,1,4,1
+E,1,5,1
+E,2,6,1
+E,4,7,1
+E,4,8,1
+E,5,9,1
+E,5,10,1
+E,6,11,1
+E,7,12,1
+E,7,13,1
+E,8,14,1
+E,9,14,1
+E,9,15,1
+E,10,13,1
+E,11,16,1
+E,12,17,1
+E,12,18,1
+E,13,19,1
+E,13,20,1
+E,14,20,1
+E,14,21,1
+E,15,22,1
+E,15,23,1
+E,16,18,1
+E,17,23,1
+E,18,24,1
+E,18,25,1
+E,19,25,1
+E,20,26,1
+E,20,23,1
+E,22,26,1
+E,24,28,1
+E,26,29,1
+E,26,30,1
+E,28,31,1
+E,29,32,1
+E,30,33,1
+E,30,34,1
+E,32,35,1
+E,33,36,1
+E,33,37,1
+E,34,38,1
+E,35,39,1
+E,35,40,1
+E,36,40,1
+E,37,41,1
+E,37,42,1
+E,38,41,1
+E,40,43,1
+E,41,43,1
+E,42,44,1
+E,43,45,1
+E,44,45,1
+S,0,4_3::0_0::0_0
+T,45,0_0::0_0::4_3
+\end{lstlisting}
+
+45$\leftarrow$43$\leftarrow$40$\leftarrow$35$\leftarrow$32$\leftarrow$29$\leftarrow$26$\leftarrow$20$\leftarrow$13$\leftarrow$7$\leftarrow$4$\leftarrow$1$\leftarrow$0
+the path can be trace from the source to the sink with the sink\\target state matching the gaol state
+\\
+The output cost 12 is correct because the depth of the tree which represents
+this problem is 12 and because each edge has a weight of 1 the cost should equal the depth of the tree.
+
+
 % //END
 
 \bibliographystyle{unsrt}
 \bibliography{bib}
+
+
 \end{document}
