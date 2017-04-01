@@ -14,7 +14,7 @@ betacore::Dijkstra<T,I> dijkstra;
 
 //This fuction can be changed if you want :-) to do some successor thing...
 void successor(I &node, std::vector<betacore::Edge<T,I>> &result){
-		G.successor(node,result);
+	G.successor(node,result);
 }
 //Node this has to be type T
 T cost(I u, I ui){
@@ -43,21 +43,21 @@ int main (int argc, char * argv[]){
 		std::function<T( I u , I ui)> cost_function = cost;
 		std::function<void(I &, std::vector<betacore::Edge<T,I>> &)> successor_function = successor;
 	
-		try{
-			dijkstra.run(source,1,path,cost_function,successor_function);
-		}catch(const std::exception& e){
+		// try{
+		// 	dijkstra.run(source,1,path,cost_function,successor_function);
+		// }catch(const std::exception& e){
 
-		}
-		path.clear();
-		try{
-			dijkstra.run(source,9,path,cost_function,successor_function);
-		}catch(const std::exception& e){
+		// }
+		// path.clear();
+		// try{
+		// 	dijkstra.run(source,9,path,cost_function,successor_function);
+		// }catch(const std::exception& e){
 			
-		}
-			path.clear();
+		// }
+		// 	path.clear();
 		try{
 			std::vector<I> targets={1,9};
-			dijkstra.run(source,targets,path);
+			dijkstra.run(source,targets,path, cost_function, successor_function);
 		}catch(const std::exception& e){
 			
 		}

@@ -32,6 +32,8 @@ namespace betacore{
 		private:
 			std::vector<betacore::Node<I>> nodes;
 			std::vector<betacore::Edge<T,I>> edges;
+			std::Node<I> source;
+			std::vector<betacore::Node<I>> targets;
 			void parse_line(std::string &line){
 				std::stringstream sstream(line);
 				std::string item;
@@ -56,6 +58,16 @@ namespace betacore{
 						I id = (I) std::stoll(vals.at(0),0,10);
 						Node<I> node (id, vals.at(1) );
 						add_node(node);
+				}
+				else if(type ==  'T' || type =='t'){
+						I id = (I) std::stoll(vals.at(0),0,10);
+						Node<I> node (id, vals.at(1) );
+						targets.push_back(node);
+				}
+				else if(type ==  'S' || type =='s'){
+						I id = (I) std::stoll(vals.at(0),0,10);
+						Node<I> node (id, vals.at(1) );
+						source=node;
 				}
 
 			}

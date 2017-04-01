@@ -97,11 +97,11 @@ namespace betacore{
 				g[source] =(T) 0;
 				while(!frontier.empty()){
 					if( frontier.empty() ){
-						std::cerr<<"The fronter is empty, how can this be?"<<std::endl;;
+						std::cerr<<"The fronter is empty, how can this be?"<<"\n";;
 						throw Dijkstra_Exception();
 					}
 					u = std::get<1>(frontier.top()); // get next node
-					std::cout<<"Node U::"<< u<<std::endl;
+					std::cout<<"Node U::"<< u<<"\n";
 						frontier.pop(); // move remove the next from the que
 
 					if(current.find(u)!= current.end())
@@ -109,7 +109,7 @@ namespace betacore{
 					//if u is the goal is it has a smaller cost
 					if( u == goal && g[goal]< _cost)
 					{
-						std::cout<< "Goal Found" <<std::endl;
+						std::cout<< "Goal Found" <<"\n";
 						_cost = g[goal];
 					}
 					// this stop exploration 
@@ -119,7 +119,7 @@ namespace betacore{
 				
 
 					if(g.find(u) == g.end()){
-						std::cerr<<"The weight is unkown, how can this be?"<<std::endl;;
+						std::cerr<<"The weight is unkown, how can this be?"<<"\n";;
 						throw Dijkstra_Exception();
 					}
 
@@ -142,7 +142,7 @@ namespace betacore{
 								frontier.push(std::make_pair(g[ui],ui));
 								current.insert(ui);
 								path[ui]=u;
-								std::cout<<"Adding to frontier edge:"<<ui <<" cost:"<< g[ui]<<std::endl;
+								std::cout<<"Adding to frontier edge:"<<ui <<" cost:"<< g[ui]<<"\n";
 							
 						}
 						// ui in F
@@ -150,7 +150,7 @@ namespace betacore{
 							if( g[u] + cost(u,ui) < g[ui] ){
 								g[ui] = g[u] + cost(u,ui);
 								path[ui] = u;
-								std::cout<<"+adding edge:"<<u <<" cost:"<< g[ui]<<std::endl; 
+								std::cout<<"+adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
 							}
 						}
 						// ui in E
@@ -161,32 +161,32 @@ namespace betacore{
 								//frontier.push(ui);
 								frontier.push(std::make_pair(g[ui],ui));
 								current.insert(source);
-							std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<std::endl; 
+							std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
 							}
 						}else{
-							std::cerr<< "bug"<<std::endl;
+							std::cerr<< "bug"<<"\n";
 						}
 					}
 				}//while(true);
 
 				for(auto e: explored){
-					std::cout<< "explored node:"<< e <<std::endl;
+					std::cout<< "explored node:"<< e <<"\n";
 				}
 				for(auto c: current){
-						std::cout<< "frontier node:"<< c <<std::endl;
+						std::cout<< "frontier node:"<< c <<"\n";
 				}
 				u = goal;
 				I mp = path[u];
 				std::cout<< u <<"<-";
 				while (mp !=source){
 					if(!path.count(mp)){
-						std::cerr<<"Path from sink doesn't lead back to source" <<std::endl;
+						std::cerr<<"Path from sink doesn't lead back to source" <<"\n";
 						throw Dijkstra_Exception();
 					}
 					std::cout<< mp <<"<-";
 					mp = path[mp];
 				}
-				std::cout<< source << std::endl;
+				std::cout<< source << "\n";
 			}
 			
 						//
@@ -210,11 +210,11 @@ namespace betacore{
 				I _goal = goal_v.at(0);
 				while(!frontier.empty()){
 					if( frontier.empty() ){
-						std::cerr<<"The fronter is empty, how can this be?"<<std::endl;;
+						std::cerr<<"The fronter is empty, how can this be?"<<"\n";;
 						throw Dijkstra_Exception();
 					}
 					u = std::get<1>(frontier.top()); // get next node
-					std::cout<<"Node U::"<< u<<std::endl;
+					std::cout<<"Node U::"<< u<<"\n";
 						frontier.pop(); // move remove the next from the que
 
 					if(current.find(u)!= current.end())
@@ -223,18 +223,22 @@ namespace betacore{
 					for(auto goal : goal_v){
 						if( u == goal && g[goal]< _cost)
 						{
-							std::cout<< "Goal Found" <<std::endl;
+							std::cout<< "Min Goal Found:"<< goal <<"\tcost:" << g[goal] <<"\n";
 							_cost = g[goal];
 							_goal = goal;
 						}
+						else{
+							std::cout<< "Other Goal Found:"<< goal <<"\tcost:" << g[goal] <<"\n";
+						}
 					}
 					// this stop exploration 
-					if(_cost< g[u]){
-						break;
-					}
+					// if(_cost< g[u]){
+					// 	std::cout<<"Stoping exploration" <<"\n";
+					// 	break;
+					// }
 
 					if(g.find(u) == g.end()){
-						std::cerr<<"The weight is unkown, how can this be?"<<std::endl;;
+						std::cerr<<"The weight is unkown, how can this be?"<<"\n";;
 						throw Dijkstra_Exception();
 					}
 
@@ -257,7 +261,7 @@ namespace betacore{
 								frontier.push(std::make_pair(g[ui],ui));
 								current.insert(ui);
 								path[ui]=u;
-								std::cout<<"Adding to frontier edge:"<<ui <<" cost:"<< g[ui]<<std::endl;
+								std::cout<<"Adding to frontier node:"<<ui <<" cost:"<< g[ui]<<"\n";
 							
 						}
 						// ui in F
@@ -265,7 +269,7 @@ namespace betacore{
 							if( g[u] + cost(u,ui) < g[ui] ){
 								g[ui] = g[u] + cost(u,ui);
 								path[ui] = u;
-								std::cout<<"+adding edge:"<<u <<" cost:"<< g[ui]<<std::endl; 
+								std::cout<<"+adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
 							}
 						}
 						// ui in E
@@ -276,32 +280,32 @@ namespace betacore{
 								//frontier.push(ui);
 								frontier.push(std::make_pair(g[ui],ui));
 								current.insert(source);
-							std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<std::endl; 
+							std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
 							}
 						}else{
-							std::cerr<< "bug"<<std::endl;
+							std::cerr<< "bug"<<"\n";
 						}
 					}
 				}//while(true);
 
 				for(auto e: explored){
-					std::cout<< "explored node:"<< e <<std::endl;
+					std::cout<< "explored node:"<< e <<"\n";
 				}
 				for(auto c: current){
-						std::cout<< "frontier node:"<< c <<std::endl;
+					std::cout<< "frontier node:"<< c <<"\n";
 				}
 				u = _goal;
 				I mp = path[u];
 				std::cout<< u <<"<-";
 				while (mp !=source){
 					if(!path.count(mp)){
-						std::cerr<<"Path from sink doesn't lead back to source" <<std::endl;
+						std::cerr<<"Path from sink doesn't lead back to source" <<"\n";
 						throw Dijkstra_Exception();
 					}
 					std::cout<< mp <<"<-";
 					mp = path[mp];
 				}
-				std::cout<< source << std::endl;
+				std::cout<< source << "\n";
 			}
 	};
 }
