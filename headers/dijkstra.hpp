@@ -298,6 +298,7 @@ namespace betacore{
 				}
 				u = _goal;
 				I mp = path[u];
+				std::cout<<"path:\n";				
 				std::cout<< u <<"<-";
 				while (mp !=source){
 					if(!path.count(mp)){
@@ -308,6 +309,8 @@ namespace betacore{
 					mp = path[mp];
 				}
 				std::cout<< source << "\n";
+				std::cout<<"cost:"<< g[u] <<"\n";
+
 			}
 	};
 }
