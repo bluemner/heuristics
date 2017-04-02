@@ -1,5 +1,6 @@
 # HEURISTICS
-
+## Documentation
+Documentation is located in the doc folder (you need latex to compile)
 ## Compiling
 ### Windows
 on window run the build.bat. Note you need cl.exe (included in visual studios) with version >= vs2012 (this is need for c++11 support) and 64 bit machine (you can change the bat to 32 bit).

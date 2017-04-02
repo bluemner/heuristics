@@ -101,7 +101,7 @@ Analysis and of c++11 implementation of Dijkstra's algorithm.
 \section[Implementation]{Implementation}
 The implementation of Dijkstra utilizes several of the c++11 standard library. c++11
 included several enhancements to the predefined data structures since the last revision. Below is how the
- data structures are defined and the running time of their 
+ data structures are defined and the running time of their. The algorithm will be implemented under betacore namespace
 %----------------------------------------
 %	Std::Vector
 % ---------------------------------------
@@ -362,8 +362,189 @@ that you add the Edge$<$T,I$>$ index I do the vector list.
 
 % \section[Proof of correctness]{Proof of correctness}
 \section{Proof of correctness}
-
+Note: running time is doesn't include loading from file, its the running time of the algorithm.
 \subsection{Flight Plans}
+
+Sample Run output:
+
+\begin{lstlisting}
+	_______________________________________________________________
+	Heuristics
+	_______________________________________________________________
+	../data/graph_gt_7_3.csv
+	N,1,SFO
+	N,2,ORD
+	N,3,BOS
+	N,4,PVD
+	N,5,JFK
+	N,6,BWI
+	N,7,MIA
+	N,8,DFW
+	N,9,LAX
+	#
+	E,1,2,1846
+	E,2,1,1846
+	#
+	E,1,8,1464
+	E,8,1,1464
+	#
+	E,1,9,337
+	E,9,1,337
+	#
+	E,2,3,867
+	E,3,2,867
+	#
+	E,2,4,849
+	E,4,2,849
+	#
+	E,2,5,740
+	E,5,2,740
+	#
+	E,2,6,621
+	E,6,2,621
+	#
+	E,2,8,802
+	E,8,2,802
+	#
+	E,3,5,187
+	E,5,3,187
+	#
+	E,3,7,1258
+	E,7,3,1258
+	#
+	E,4,5,144
+	E,5,4,144
+	#
+	E,5,6,184
+	E,6,5,184
+	#
+	E,5,7,1090
+	E,7,5,1090
+	#
+	E,5,8,1391
+	E,8,5,1391
+	#
+	E,6,7,946
+	E,7,6,946
+	#
+	E,7,8,1121
+	E,8,7,1121
+	#
+	E,7,9,2342
+	E,9,7,2342
+	#
+	E,8,9,1235
+	E,9,8,1235
+	#
+	T,1,SFO
+	T,9,LAX
+	S,6,BWI
+	_______________________________________________________________
+	Edge:1->2 cost:1846
+	Edge:2->1 cost:1846
+	Edge:1->8 cost:1464
+	Edge:8->1 cost:1464
+	Edge:1->9 cost:337
+	Edge:9->1 cost:337
+	Edge:2->3 cost:867
+	Edge:3->2 cost:867
+	Edge:2->4 cost:849
+	Edge:4->2 cost:849
+	Edge:2->5 cost:740
+	Edge:5->2 cost:740
+	Edge:2->6 cost:621
+	Edge:6->2 cost:621
+	Edge:2->8 cost:802
+	Edge:8->2 cost:802
+	Edge:3->5 cost:187
+	Edge:5->3 cost:187
+	Edge:3->7 cost:1258
+	Edge:7->3 cost:1258
+	Edge:4->5 cost:144
+	Edge:5->4 cost:144
+	Edge:5->6 cost:184
+	Edge:6->5 cost:184
+	Edge:5->7 cost:1090
+	Edge:7->5 cost:1090
+	Edge:5->8 cost:1391
+	Edge:8->5 cost:1391
+	Edge:6->7 cost:946
+	Edge:7->6 cost:946
+	Edge:7->8 cost:1121
+	Edge:8->7 cost:1121
+	Edge:7->9 cost:2342
+	Edge:9->7 cost:2342
+	Edge:8->9 cost:1235
+	Edge:9->8 cost:1235
+	Nodes:1
+	Nodes:2
+	Nodes:3
+	Nodes:4
+	Nodes:5
+	Nodes:6
+	Nodes:7
+	Nodes:8
+	Nodes:9
+	_______________________________________________________________
+	Node U::6
+	Other Goal Found:1	cost:0
+	Other Goal Found:9	cost:0
+	Adding to frontier node:2 cost:621
+	Adding to frontier node:5 cost:184
+	Adding to frontier node:7 cost:946
+	Node U::5
+	Other Goal Found:1	cost:0
+	Other Goal Found:9	cost:0
+	Adding to frontier node:3 cost:371
+	Adding to frontier node:4 cost:328
+	Adding to frontier node:8 cost:1575
+	Node U::4
+	Other Goal Found:1	cost:0
+	Other Goal Found:9	cost:0
+	Node U::3
+	Other Goal Found:1	cost:0
+	Other Goal Found:9	cost:0
+	Node U::2
+	Other Goal Found:1	cost:0
+	Other Goal Found:9	cost:0
+	Adding to frontier node:1 cost:2467
+	+adding edge:2 cost:1423
+	Node U::7
+	Other Goal Found:1	cost:2467
+	Other Goal Found:9	cost:0
+	Adding to frontier node:9 cost:3288
+	Node U::8
+	Other Goal Found:1	cost:2467
+	Other Goal Found:9	cost:3288
+	+adding edge:8 cost:2658
+	Node U::1
+	Min Goal Found:1	cost:2467
+	Other Goal Found:9	cost:2658
+	Node U::9
+	Other Goal Found:1	cost:2467
+	Other Goal Found:9	cost:2658
+	explored node count:8
+	explored node:1
+	explored node:2
+	explored node:3
+	explored node:4
+	explored node:5
+	explored node:6
+	explored node:7
+	explored node:8
+	frontier node count:0
+	path:
+	1<-2<-6
+	cost:2467
+	Running time(includes std::cout):	0.000282s
+	cpu start: 0	cpu end:1	CLOCKS_PER_SEC:1000
+	cpu time(includes std::cout):	0.001s
+	_______________________________________________________________
+
+\end{lstlisting}
+* Note the cpu run time may not appear accurate due to the running system (see System \\ information \ref{sysinfo})
+
+Doing the trace by hand yielded similar results with the min path being BWI $\to$ ORD  $\to$ SFO
 
 \subsection{Missionaries and Cannibals}
 With run of $n=3$ and $m=2$ \\
@@ -378,8 +559,13 @@ Name: LHS(Missionaries\_Cannibals)::Boat(Missionaries\_Cannibals)::RHS(Missionar
 \\
 Each Edge is source, target, cost\\
 Boat move from LHS $\to$ RHS
+
+Sample Run output:
 \begin{lstlisting}
-	File grap_can_n_3_m_2.csv:
+	_______________________________________________________________
+	Heuristics
+	_______________________________________________________________
+	../data/graph_can_n_3_m_2.csv
 	N,0,N::3_2::0_0::0_0
 	N,1,N::2_1::1_1::0_0
 	N,2,N::3_0::0_2::0_0
@@ -436,8 +622,171 @@ Boat move from LHS $\to$ RHS
 	E,23,24,1
 	S,0,N::3_2::0_0::0_0
 	T,24,N::0_0::0_0::3_2
-\end{lstlisting}
+	_______________________________________________________________
+	Edge:0->1 cost:1
+	Edge:0->2 cost:1
+	Edge:0->3 cost:1
+	Edge:1->4 cost:1
+	Edge:1->5 cost:1
+	Edge:2->6 cost:1
+	Edge:4->7 cost:1
+	Edge:4->8 cost:1
+	Edge:5->9 cost:1
+	Edge:5->10 cost:1
+	Edge:6->9 cost:1
+	Edge:7->11 cost:1
+	Edge:7->12 cost:1
+	Edge:8->13 cost:1
+	Edge:9->13 cost:1
+	Edge:11->15 cost:1
+	Edge:11->16 cost:1
+	Edge:12->16 cost:1
+	Edge:13->17 cost:1
+	Edge:14->18 cost:1
+	Edge:15->19 cost:1
+	Edge:16->20 cost:1
+	Edge:17->19 cost:1
+	Edge:17->21 cost:1
+	Edge:18->21 cost:1
+	Edge:19->22 cost:1
+	Edge:20->23 cost:1
+	Edge:22->24 cost:1
+	Edge:23->24 cost:1
+	Nodes:0
+	Nodes:1
+	Nodes:2
+	Nodes:3
+	Nodes:4
+	Nodes:5
+	Nodes:6
+	Nodes:7
+	Nodes:8
+	Nodes:9
+	Nodes:10
+	Nodes:11
+	Nodes:12
+	Nodes:13
+	Nodes:14
+	Nodes:15
+	Nodes:16
+	Nodes:17
+	Nodes:18
+	Nodes:19
+	Nodes:20
+	Nodes:21
+	Nodes:22
+	Nodes:23
+	Nodes:24
+	_______________________________________________________________
+	Node U::0
+	Other Goal Found:24	cost:0
+	Adding to frontier node:1 cost:1
+	Adding to frontier node:2 cost:1
+	Adding to frontier node:3 cost:1
+	Node U::1
+	Other Goal Found:24	cost:0
+	Adding to frontier node:4 cost:2
+	Adding to frontier node:5 cost:2
+	Node U::2
+	Other Goal Found:24	cost:0
+	Adding to frontier node:6 cost:2
+	Node U::3
+	Other Goal Found:24	cost:0
+	Node U::4
+	Other Goal Found:24	cost:0
+	Adding to frontier node:7 cost:3
+	Adding to frontier node:8 cost:3
+	Node U::5
+	Other Goal Found:24	cost:0
+	Adding to frontier node:9 cost:3
+	Adding to frontier node:10 cost:3
+	Node U::6
+	Other Goal Found:24	cost:0
+	Node U::7
+	Other Goal Found:24	cost:0
+	Adding to frontier node:11 cost:4
+	Adding to frontier node:12 cost:4
+	Node U::8
+	Other Goal Found:24	cost:0
+	Adding to frontier node:13 cost:4
+	Node U::9
+	Other Goal Found:24	cost:0
+	Node U::10
+	Other Goal Found:24	cost:0
+	Node U::11
+	Other Goal Found:24	cost:0
+	Adding to frontier node:15 cost:5
+	Adding to frontier node:16 cost:5
+	Node U::12
+	Other Goal Found:24	cost:0
+	Node U::13
+	Other Goal Found:24	cost:0
+	Adding to frontier node:17 cost:5
+	Node U::15
+	Other Goal Found:24	cost:0
+	Adding to frontier node:19 cost:6
+	Node U::16
+	Other Goal Found:24	cost:0
+	Adding to frontier node:20 cost:6
+	Node U::17
+	Other Goal Found:24	cost:0
+	Adding to frontier node:21 cost:6
+	Node U::19
+	Other Goal Found:24	cost:0
+	Adding to frontier node:22 cost:7
+	Node U::20
+	Other Goal Found:24	cost:0
+	Adding to frontier node:23 cost:7
+	Node U::21
+	Other Goal Found:24	cost:0
+	Node U::22
+	Other Goal Found:24	cost:0
+	Adding to frontier node:24 cost:8
+	Node U::23
+	Other Goal Found:24	cost:8
+	Node U::24
+	Min Goal Found:24	cost:8
+	explored node count:23
+	explored node:0
+	explored node:1
+	explored node:2
+	explored node:3
+	explored node:4
+	explored node:5
+	explored node:6
+	explored node:7
+	explored node:8
+	explored node:9
+	explored node:10
+	explored node:11
+	explored node:12
+	explored node:13
+	explored node:15
+	explored node:16
+	explored node:17
+	explored node:19
+	explored node:20
+	explored node:21
+	explored node:22
+	explored node:23
+	explored node:24
+	frontier node count:0
+	path:
+	24<-22<-19<-15<-11<-7<-4<-1<-0
+	cost:8
+	Running time(includes std::cout):	0.0004963s
+	cpu start: 1	cpu end:1	CLOCKS_PER_SEC:1000
+	cpu time(includes std::cout):	0s
+	_______________________________________________________________
 
+\end{lstlisting}
+* Note the cpu run time may not appear accurate due to the running system (see System \\ information \ref{sysinfo})
+\\
+\\
+The path\\
+24$\leftarrow$22$\leftarrow$19$\leftarrow$15$\leftarrow$11$\leftarrow$7$\leftarrow$4$\leftarrow$1$\leftarrow$0
+matches the tree state of the problem and is the length of the depth of the tree. 
+Each edge havening a cost of 1 yields the correct cost which matches the numbers of edges
 With run of $n=4$ and $m=3$ 
 The graph in the format:\\
 Each node represents the following\\
@@ -450,113 +799,413 @@ Name: LHS(Missionaries\_Cannibals)::Boat(Missionaries\_Cannibals)::RHS(Missionar
 \\
 Each Edge is source, target, cost\\
 Boat move from LHS $\to$ RHS
+
+Sample Run output:
 \begin{lstlisting}
-File grap_can_n_4_m_3.csv:
-N,0,4_3::0_0::0_0
-N,1,3_2::1_1::0_0
-N,2,4_1::0_2::0_0
-N,3,2_3::2_0::0_0
-N,4,3_2::1_0::0_1
-N,5,3_2::0_1::1_0
-N,6,4_1::0_1::0_1
-N,7,3_1::1_1::0_1
-N,8,2_2::2_0::0_1
-N,9,2_2::1_1::1_0
-N,10,3_1::0_2::1_0
-N,11,4_0::0_2::0_1
-N,12,3_1::1_0::0_2
-N,13,3_1::0_1::1_1
-N,14,2_2::1_0::1_1
-N,15,2_2::0_1::2_0
-N,16,4_0::0_1::0_2
-N,17,2_1::2_0::0_2
-N,18,3_0::1_1::0_2
-N,19,3_0::0_2::1_1
-N,20,2_1::1_1::1_1
-N,21,1_2::2_0::1_1
-N,22,2_1::0_2::2_0
-N,23,2_1::1_0::1_2
-N,24,3_0::1_0::0_3
-N,25,3_0::0_1::1_2
-N,26,2_1::0_1::2_1
-N,27,2_1::1_0::1_2
-N,28,2_0::2_0::0_3
-N,29,2_0::0_2::2_1
-N,30,1_1::1_1::2_1
-N,31,2_0::1_0::1_3
-N,32,2_0::0_1::2_2
-N,33,1_1::0_1::3_1
-N,34,1_1::1_0::2_2
-N,35,1_0::1_1::2_2
-N,36,1_0::0_2::3_1
-N,37,0_1::1_1::3_1
-N,38,0_1::2_0::2_2
-N,39,1_0::1_0::2_3
-N,40,1_0::0_1::3_2
-N,41,0_1::1_0::3_2
-N,42,0_1::0_1::4_1
-N,43,0_0::1_1::3_2
-N,44,0_0::0_2::4_1
-N,45,0_0::0_0::4_3
-E,0,1,1
-E,0,2,1
-E,0,3,1
-E,1,4,1
-E,1,5,1
-E,2,6,1
-E,4,7,1
-E,4,8,1
-E,5,9,1
-E,5,10,1
-E,6,11,1
-E,7,12,1
-E,7,13,1
-E,8,14,1
-E,9,14,1
-E,9,15,1
-E,10,13,1
-E,11,16,1
-E,12,17,1
-E,12,18,1
-E,13,19,1
-E,13,20,1
-E,14,20,1
-E,14,21,1
-E,15,22,1
-E,15,23,1
-E,16,18,1
-E,17,23,1
-E,18,24,1
-E,18,25,1
-E,19,25,1
-E,20,26,1
-E,20,23,1
-E,22,26,1
-E,24,28,1
-E,26,29,1
-E,26,30,1
-E,28,31,1
-E,29,32,1
-E,30,33,1
-E,30,34,1
-E,32,35,1
-E,33,36,1
-E,33,37,1
-E,34,38,1
-E,35,39,1
-E,35,40,1
-E,36,40,1
-E,37,41,1
-E,37,42,1
-E,38,41,1
-E,40,43,1
-E,41,43,1
-E,42,44,1
-E,43,45,1
-E,44,45,1
-S,0,4_3::0_0::0_0
-T,45,0_0::0_0::4_3
+	_______________________________________________________________
+	Heuristics
+	_______________________________________________________________
+	../data/graph_can_n_4_m_3.csv
+	N,0,4_3::0_0::0_0
+	N,1,3_2::1_1::0_0
+	N,2,4_1::0_2::0_0
+	N,3,2_3::2_0::0_0
+	N,4,3_2::1_0::0_1
+	N,5,3_2::0_1::1_0
+	N,6,4_1::0_1::0_1
+	N,7,3_1::1_1::0_1
+	N,8,2_2::2_0::0_1
+	N,9,2_2::1_1::1_0
+	N,10,3_1::0_2::1_0
+	N,11,4_0::0_2::0_1
+	N,12,3_1::1_0::0_2
+	N,13,3_1::0_1::1_1
+	N,14,2_2::1_0::1_1
+	N,15,2_2::0_1::2_0
+	N,16,4_0::0_1::0_2
+	N,17,2_1::2_0::0_2
+	N,18,3_0::1_1::0_2
+	N,19,3_0::0_2::1_1
+	N,20,2_1::1_1::1_1
+	N,21,1_2::2_0::1_1
+	N,22,2_1::0_2::2_0
+	N,23,2_1::1_0::1_2
+	N,24,3_0::1_0::0_3
+	N,25,3_0::0_1::1_2
+	N,26,2_1::0_1::2_1
+	N,27,2_1::1_0::1_2
+	N,28,2_0::2_0::0_3
+	N,29,2_0::0_2::2_1
+	N,30,1_1::1_1::2_1
+	N,31,2_0::1_0::1_3
+	N,32,2_0::0_1::2_2
+	N,33,1_1::0_1::3_1
+	N,34,1_1::1_0::2_2
+	N,35,1_0::1_1::2_2
+	N,36,1_0::0_2::3_1
+	N,37,0_1::1_1::3_1
+	N,38,0_1::2_0::2_2
+	N,39,1_0::1_0::2_3
+	N,40,1_0::0_1::3_2
+	N,41,0_1::1_0::3_2
+	N,42,0_1::0_1::4_1
+	N,43,0_0::1_1::3_2
+	N,44,0_0::0_2::4_1
+	N,45,0_0::0_0::4_3
+	E,0,1,1
+	E,0,2,1
+	E,0,3,1
+	E,1,4,1
+	E,1,5,1
+	E,2,6,1
+	E,4,7,1
+	E,4,8,1
+	E,5,9,1
+	E,5,10,1
+	E,6,11,1
+	E,7,12,1
+	E,7,13,1
+	E,8,14,1
+	E,9,14,1
+	E,9,15,1
+	E,10,13,1
+	E,11,16,1
+	E,12,17,1
+	E,12,18,1
+	E,13,19,1
+	E,13,20,1
+	E,14,20,1
+	E,14,21,1
+	E,15,22,1
+	E,15,23,1
+	E,16,18,1
+	E,17,23,1
+	E,18,24,1
+	E,18,25,1
+	E,19,25,1
+	E,20,26,1
+	E,20,23,1
+	E,22,26,1
+	E,24,28,1
+	E,26,29,1
+	E,26,30,1
+	E,28,31,1
+	E,29,32,1
+	E,30,33,1
+	E,30,34,1
+	E,32,35,1
+	E,33,36,1
+	E,33,37,1
+	E,34,38,1
+	E,35,39,1
+	E,35,40,1
+	E,36,40,1
+	E,37,41,1
+	E,37,42,1
+	E,38,41,1
+	E,40,43,1
+	E,41,43,1
+	E,42,44,1
+	E,43,45,1
+	E,44,45,1
+	S,0,4_3::0_0::0_0
+	T,45,0_0::0_0::4_3
+	_______________________________________________________________
+	Edge:0->1 cost:1
+	Edge:0->2 cost:1
+	Edge:0->3 cost:1
+	Edge:1->4 cost:1
+	Edge:1->5 cost:1
+	Edge:2->6 cost:1
+	Edge:4->7 cost:1
+	Edge:4->8 cost:1
+	Edge:5->9 cost:1
+	Edge:5->10 cost:1
+	Edge:6->11 cost:1
+	Edge:7->12 cost:1
+	Edge:7->13 cost:1
+	Edge:8->14 cost:1
+	Edge:9->14 cost:1
+	Edge:9->15 cost:1
+	Edge:10->13 cost:1
+	Edge:11->16 cost:1
+	Edge:12->17 cost:1
+	Edge:12->18 cost:1
+	Edge:13->19 cost:1
+	Edge:13->20 cost:1
+	Edge:14->20 cost:1
+	Edge:14->21 cost:1
+	Edge:15->22 cost:1
+	Edge:15->23 cost:1
+	Edge:16->18 cost:1
+	Edge:17->23 cost:1
+	Edge:18->24 cost:1
+	Edge:18->25 cost:1
+	Edge:19->25 cost:1
+	Edge:20->26 cost:1
+	Edge:20->23 cost:1
+	Edge:22->26 cost:1
+	Edge:24->28 cost:1
+	Edge:26->29 cost:1
+	Edge:26->30 cost:1
+	Edge:28->31 cost:1
+	Edge:29->32 cost:1
+	Edge:30->33 cost:1
+	Edge:30->34 cost:1
+	Edge:32->35 cost:1
+	Edge:33->36 cost:1
+	Edge:33->37 cost:1
+	Edge:34->38 cost:1
+	Edge:35->39 cost:1
+	Edge:35->40 cost:1
+	Edge:36->40 cost:1
+	Edge:37->41 cost:1
+	Edge:37->42 cost:1
+	Edge:38->41 cost:1
+	Edge:40->43 cost:1
+	Edge:41->43 cost:1
+	Edge:42->44 cost:1
+	Edge:43->45 cost:1
+	Edge:44->45 cost:1
+	Nodes:0
+	Nodes:1
+	Nodes:2
+	Nodes:3
+	Nodes:4
+	Nodes:5
+	Nodes:6
+	Nodes:7
+	Nodes:8
+	Nodes:9
+	Nodes:10
+	Nodes:11
+	Nodes:12
+	Nodes:13
+	Nodes:14
+	Nodes:15
+	Nodes:16
+	Nodes:17
+	Nodes:18
+	Nodes:19
+	Nodes:20
+	Nodes:21
+	Nodes:22
+	Nodes:23
+	Nodes:24
+	Nodes:25
+	Nodes:26
+	Nodes:27
+	Nodes:28
+	Nodes:29
+	Nodes:30
+	Nodes:31
+	Nodes:32
+	Nodes:33
+	Nodes:34
+	Nodes:35
+	Nodes:36
+	Nodes:37
+	Nodes:38
+	Nodes:39
+	Nodes:40
+	Nodes:41
+	Nodes:42
+	Nodes:43
+	Nodes:44
+	Nodes:45
+	_______________________________________________________________
+	Node U::0
+	Other Goal Found:45	cost:0
+	Adding to frontier node:1 cost:1
+	Adding to frontier node:2 cost:1
+	Adding to frontier node:3 cost:1
+	Node U::1
+	Other Goal Found:45	cost:0
+	Adding to frontier node:4 cost:2
+	Adding to frontier node:5 cost:2
+	Node U::2
+	Other Goal Found:45	cost:0
+	Adding to frontier node:6 cost:2
+	Node U::3
+	Other Goal Found:45	cost:0
+	Node U::4
+	Other Goal Found:45	cost:0
+	Adding to frontier node:7 cost:3
+	Adding to frontier node:8 cost:3
+	Node U::5
+	Other Goal Found:45	cost:0
+	Adding to frontier node:9 cost:3
+	Adding to frontier node:10 cost:3
+	Node U::6
+	Other Goal Found:45	cost:0
+	Adding to frontier node:11 cost:3
+	Node U::7
+	Other Goal Found:45	cost:0
+	Adding to frontier node:12 cost:4
+	Adding to frontier node:13 cost:4
+	Node U::8
+	Other Goal Found:45	cost:0
+	Adding to frontier node:14 cost:4
+	Node U::9
+	Other Goal Found:45	cost:0
+	Adding to frontier node:15 cost:4
+	Node U::10
+	Other Goal Found:45	cost:0
+	Node U::11
+	Other Goal Found:45	cost:0
+	Adding to frontier node:16 cost:4
+	Node U::12
+	Other Goal Found:45	cost:0
+	Adding to frontier node:17 cost:5
+	Adding to frontier node:18 cost:5
+	Node U::13
+	Other Goal Found:45	cost:0
+	Adding to frontier node:19 cost:5
+	Adding to frontier node:20 cost:5
+	Node U::14
+	Other Goal Found:45	cost:0
+	Adding to frontier node:21 cost:5
+	Node U::15
+	Other Goal Found:45	cost:0
+	Adding to frontier node:22 cost:5
+	Adding to frontier node:23 cost:5
+	Node U::16
+	Other Goal Found:45	cost:0
+	Node U::17
+	Other Goal Found:45	cost:0
+	Node U::18
+	Other Goal Found:45	cost:0
+	Adding to frontier node:24 cost:6
+	Adding to frontier node:25 cost:6
+	Node U::19
+	Other Goal Found:45	cost:0
+	Node U::20
+	Other Goal Found:45	cost:0
+	Adding to frontier node:26 cost:6
+	Node U::21
+	Other Goal Found:45	cost:0
+	Node U::22
+	Other Goal Found:45	cost:0
+	Node U::23
+	Other Goal Found:45	cost:0
+	Node U::24
+	Other Goal Found:45	cost:0
+	Adding to frontier node:28 cost:7
+	Node U::25
+	Other Goal Found:45	cost:0
+	Node U::26
+	Other Goal Found:45	cost:0
+	Adding to frontier node:29 cost:7
+	Adding to frontier node:30 cost:7
+	Node U::28
+	Other Goal Found:45	cost:0
+	Adding to frontier node:31 cost:8
+	Node U::29
+	Other Goal Found:45	cost:0
+	Adding to frontier node:32 cost:8
+	Node U::30
+	Other Goal Found:45	cost:0
+	Adding to frontier node:33 cost:8
+	Adding to frontier node:34 cost:8
+	Node U::31
+	Other Goal Found:45	cost:0
+	Node U::32
+	Other Goal Found:45	cost:0
+	Adding to frontier node:35 cost:9
+	Node U::33
+	Other Goal Found:45	cost:0
+	Adding to frontier node:36 cost:9
+	Adding to frontier node:37 cost:9
+	Node U::34
+	Other Goal Found:45	cost:0
+	Adding to frontier node:38 cost:9
+	Node U::35
+	Other Goal Found:45	cost:0
+	Adding to frontier node:39 cost:10
+	Adding to frontier node:40 cost:10
+	Node U::36
+	Other Goal Found:45	cost:0
+	Node U::37
+	Other Goal Found:45	cost:0
+	Adding to frontier node:41 cost:10
+	Adding to frontier node:42 cost:10
+	Node U::38
+	Other Goal Found:45	cost:0
+	Node U::39
+	Other Goal Found:45	cost:0
+	Node U::40
+	Other Goal Found:45	cost:0
+	Adding to frontier node:43 cost:11
+	Node U::41
+	Other Goal Found:45	cost:0
+	Node U::42
+	Other Goal Found:45	cost:0
+	Adding to frontier node:44 cost:11
+	Node U::43
+	Other Goal Found:45	cost:0
+	Adding to frontier node:45 cost:12
+	Node U::44
+	Other Goal Found:45	cost:12
+	Node U::45
+	Min Goal Found:45	cost:12
+	explored node count:45
+	explored node:0
+	explored node:1
+	explored node:2
+	explored node:3
+	explored node:4
+	explored node:5
+	explored node:6
+	explored node:7
+	explored node:8
+	explored node:9
+	explored node:10
+	explored node:11
+	explored node:12
+	explored node:13
+	explored node:14
+	explored node:15
+	explored node:16
+	explored node:17
+	explored node:18
+	explored node:19
+	explored node:20
+	explored node:21
+	explored node:22
+	explored node:23
+	explored node:24
+	explored node:25
+	explored node:26
+	explored node:28
+	explored node:29
+	explored node:30
+	explored node:31
+	explored node:32
+	explored node:33
+	explored node:34
+	explored node:35
+	explored node:36
+	explored node:37
+	explored node:38
+	explored node:39
+	explored node:40
+	explored node:41
+	explored node:42
+	explored node:43
+	explored node:44
+	explored node:45
+	frontier node count:0
+	path:
+	45<-43<-40<-35<-32<-29<-26<-20<-13<-7<-4<-1<-0
+	cost:12
+	Running time(includes std::cout):	0.0010232s
+	cpu start: 1	cpu end:2	CLOCKS_PER_SEC:1000
+	cpu time(includes std::cout):	0.001s
+	_______________________________________________________________
+
 \end{lstlisting}
+* Note the cpu run time may not appear accurate due to the running system (see System \\ information \ref{sysinfo})
+
 
 45$\leftarrow$43$\leftarrow$40$\leftarrow$35$\leftarrow$32$\leftarrow$29$\leftarrow$26$\leftarrow$20$\leftarrow$13$\leftarrow$7$\leftarrow$4$\leftarrow$1$\leftarrow$0
 the path can be trace from the source to the sink with the sink\\target state matching the gaol state
@@ -564,9 +1213,218 @@ the path can be trace from the source to the sink with the sink\\target state ma
 The output cost 12 is correct because the depth of the tree which represents
 this problem is 12 and because each edge has a weight of 1 the cost should equal the depth of the tree.
 
+\subsection{System information}\label{sysinfo}
+clinfo.exe dump of system information. 
+Note im running on cl.exe in debug mode on Windows 10 x64
+\begin{lstlisting}
+Number of platforms:				 1
+  Platform Profile:				 FULL_PROFILE
+  Platform Version:				 OpenCL 2.0 AMD-APP (2264.11)
+  Platform Name:				 AMD Accelerated Parallel Processing
+  Platform Vendor:				 Advanced Micro Devices, Inc.
+  Platform Extensions:				 cl_khr_icd cl_khr_d3d10_sharing cl_khr_d3d11_sharing cl_khr_dx9_media_sharing cl_amd_event_callback cl_amd_offline_devices 
 
+
+  Platform Name:				 AMD Accelerated Parallel Processing
+Number of devices:				 2
+  Device Type:					 CL_DEVICE_TYPE_GPU
+  Vendor ID:					 1002h
+  Board name:					 AMD Radeon HD 7800 Series
+  Device Topology:				 PCI[ B#1, D#0, F#0 ]
+  Max compute units:				 16
+  Max work items dimensions:			 3
+    Max work items[0]:				 256
+    Max work items[1]:				 256
+    Max work items[2]:				 256
+  Max work group size:				 256
+  Preferred vector width char:			 4
+  Preferred vector width short:			 2
+  Preferred vector width int:			 1
+  Preferred vector width long:			 1
+  Preferred vector width float:			 1
+  Preferred vector width double:		 1
+  Native vector width char:			 4
+  Native vector width short:			 2
+  Native vector width int:			 1
+  Native vector width long:			 1
+  Native vector width float:			 1
+  Native vector width double:			 1
+  Max clock frequency:				 860Mhz
+  Address bits:					 32
+  Max memory allocation:			 1409286144
+  Image support:				 Yes
+  Max number of images read arguments:		 128
+  Max number of images write arguments:		 8
+  Max image 2D width:				 16384
+  Max image 2D height:				 16384
+  Max image 3D width:				 2048
+  Max image 3D height:				 2048
+  Max image 3D depth:				 2048
+  Max samplers within kernel:			 16
+  Max size of kernel argument:			 1024
+  Alignment (bits) of base address:		 2048
+  Minimum alignment (bytes) for any datatype:	 128
+  Single precision floating point capability
+    Denorms:					 No
+    Quiet NaNs:					 Yes
+    Round to nearest even:			 Yes
+    Round to zero:				 Yes
+    Round to +ve and infinity:			 Yes
+    IEEE754-2008 fused multiply-add:		 Yes
+  Cache type:					 Read/Write
+  Cache line size:				 64
+  Cache size:					 16384
+  Global memory size:				 2147483648
+  Constant buffer size:				 65536
+  Max number of constant args:			 8
+  Local memory type:				 Scratchpad
+  Local memory size:				 32768
+  Max pipe arguments:				 0
+  Max pipe active reservations:			 0
+  Max pipe packet size:				 0
+  Max global variable size:			 0
+  Max global variable preferred total size:	 0
+  Max read/write image args:			 0
+  Max on device events:				 0
+  Queue on device max size:			 0
+  Max on device queues:				 0
+  Queue on device preferred size:		 0
+  SVM capabilities:				 
+    Coarse grain buffer:			 No
+    Fine grain buffer:				 No
+    Fine grain system:				 No
+    Atomics:					 No
+  Preferred platform atomic alignment:		 0
+  Preferred global atomic alignment:		 0
+  Preferred local atomic alignment:		 0
+  Kernel Preferred work group size multiple:	 64
+  Error correction support:			 0
+  Unified memory for Host and Device:		 0
+  Profiling timer resolution:			 1
+  Device endianess:				 Little
+  Available:					 Yes
+  Compiler available:				 Yes
+  Execution capabilities:				 
+    Execute OpenCL kernels:			 Yes
+    Execute native function:			 No
+  Queue on Host properties:				 
+    Out-of-Order:				 No
+    Profiling :					 Yes
+  Queue on Device properties:				 
+    Out-of-Order:				 No
+    Profiling :					 No
+  Platform ID:					 00007FFE8904B188
+  Name:						 Pitcairn
+  Vendor:					 Advanced Micro Devices, Inc.
+  Device OpenCL C version:			 OpenCL C 1.2 
+  Driver version:				 2264.11
+  Profile:					 FULL_PROFILE
+  Version:					 OpenCL 1.2 AMD-APP (2264.11)
+  Extensions:					 cl_khr_fp64 cl_amd_fp64 cl_khr_global_int32_base_atomics cl_khr_global_int32_extended_atomics cl_khr_local_int32_base_atomics cl_khr_local_int32_extended_atomics cl_khr_int64_base_atomics cl_khr_int64_extended_atomics cl_khr_3d_image_writes cl_khr_byte_addressable_store cl_khr_gl_sharing cl_amd_device_attribute_query cl_amd_vec3 cl_amd_printf cl_amd_media_ops cl_amd_media_ops2 cl_amd_popcnt cl_khr_d3d10_sharing cl_khr_d3d11_sharing cl_khr_dx9_media_sharing cl_khr_image2d_from_buffer cl_khr_spir cl_khr_gl_event cl_amd_liquid_flash 
+
+
+  Device Type:					 CL_DEVICE_TYPE_CPU
+  Vendor ID:					 1002h
+  Board name:					 
+  Max compute units:				 4
+  Max work items dimensions:			 3
+    Max work items[0]:				 1024
+    Max work items[1]:				 1024
+    Max work items[2]:				 1024
+  Max work group size:				 1024
+  Preferred vector width char:			 16
+  Preferred vector width short:			 8
+  Preferred vector width int:			 4
+  Preferred vector width long:			 2
+  Preferred vector width float:			 8
+  Preferred vector width double:		 4
+  Native vector width char:			 16
+  Native vector width short:			 8
+  Native vector width int:			 4
+  Native vector width long:			 2
+  Native vector width float:			 8
+  Native vector width double:			 4
+  Max clock frequency:				 3504Mhz
+  Address bits:					 64
+  Max memory allocation:			 4275856384
+  Image support:				 Yes
+  Max number of images read arguments:		 128
+  Max number of images write arguments:		 64
+  Max image 2D width:				 8192
+  Max image 2D height:				 8192
+  Max image 3D width:				 2048
+  Max image 3D height:				 2048
+  Max image 3D depth:				 2048
+  Max samplers within kernel:			 16
+  Max size of kernel argument:			 4096
+  Alignment (bits) of base address:		 1024
+  Minimum alignment (bytes) for any datatype:	 128
+  Single precision floating point capability
+    Denorms:					 Yes
+    Quiet NaNs:					 Yes
+    Round to nearest even:			 Yes
+    Round to zero:				 Yes
+    Round to +ve and infinity:			 Yes
+    IEEE754-2008 fused multiply-add:		 Yes
+  Cache type:					 Read/Write
+  Cache line size:				 64
+  Cache size:					 32768
+  Global memory size:				 17103425536
+  Constant buffer size:				 65536
+  Max number of constant args:			 8
+  Local memory type:				 Global
+  Local memory size:				 32768
+  Max pipe arguments:				 16
+  Max pipe active reservations:			 16
+  Max pipe packet size:				 4275856384
+  Max global variable size:			 1879048192
+  Max global variable preferred total size:	 1879048192
+  Max read/write image args:			 64
+  Max on device events:				 0
+  Queue on device max size:			 0
+  Max on device queues:				 0
+  Queue on device preferred size:		 0
+  SVM capabilities:				 
+    Coarse grain buffer:			 No
+    Fine grain buffer:				 No
+    Fine grain system:				 No
+    Atomics:					 No
+  Preferred platform atomic alignment:		 0
+  Preferred global atomic alignment:		 0
+  Preferred local atomic alignment:		 0
+  Kernel Preferred work group size multiple:	 1
+  Error correction support:			 0
+  Unified memory for Host and Device:		 1
+  Profiling timer resolution:			 292
+  Device endianess:				 Little
+  Available:					 Yes
+  Compiler available:				 Yes
+  Execution capabilities:				 
+    Execute OpenCL kernels:			 Yes
+    Execute native function:			 Yes
+  Queue on Host properties:				 
+    Out-of-Order:				 No
+    Profiling :					 Yes
+  Queue on Device properties:				 
+    Out-of-Order:				 No
+    Profiling :					 No
+  Platform ID:					 00007FFE8904B188
+  Name:						 Intel(R) Core(TM) i5-6600K CPU @ 3.50GHz
+  Vendor:					 GenuineIntel
+  Device OpenCL C version:			 OpenCL C 1.2 
+  Driver version:				 2264.11 (sse2,avx)
+  Profile:					 FULL_PROFILE
+  Version:					 OpenCL 1.2 AMD-APP (2264.11)
+  Extensions:					 cl_khr_fp64 cl_amd_fp64 cl_khr_global_int32_base_atomics cl_khr_global_int32_extended_atomics cl_khr_local_int32_base_atomics cl_khr_local_int32_extended_atomics cl_khr_int64_base_atomics cl_khr_int64_extended_atomics cl_khr_3d_image_writes cl_khr_byte_addressable_store cl_khr_gl_sharing cl_ext_device_fission cl_amd_device_attribute_query cl_amd_vec3 cl_amd_printf cl_amd_media_ops cl_amd_media_ops2 cl_amd_popcnt cl_khr_d3d10_sharing cl_khr_spir cl_khr_gl_event 
+
+
+
+\end{lstlisting}
 % //END
 
+\section{ Sources of Error}
+There could be some sources of error in my graph csv files, 
+incorrectly adding edges or mistyping the graph state for the Cannibals and Missionaries.
 \bibliographystyle{unsrt}
 \bibliography{bib}
 

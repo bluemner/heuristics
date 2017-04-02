@@ -57,8 +57,9 @@ int main (int argc, char * argv[]){
 			auto end_cpu = std::clock();
 			std::chrono::duration<double> diff = end-start;
 			std::cout<< "Running time(includes std::cout):\t" << diff.count() <<"s" << std::endl;			
-			std::cout<< "cpu start: "<< start_cpu << "\t" <<"cpu end:" <<end_cpu <<std::endl;		
+			std::cout<< "cpu start: "<< start_cpu << "\t" <<"cpu end:"<<end_cpu<<"\tCLOCKS_PER_SEC:"<<CLOCKS_PER_SEC  <<std::endl;		
 			double cpu = (end_cpu - start_cpu) / (double)CLOCKS_PER_SEC ;
+			
 			std::cout<< "cpu time(includes std::cout):\t" <<cpu<<"s" << std::endl;
 		}catch(const std::exception& e){
 			

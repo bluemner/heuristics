@@ -112,11 +112,10 @@ namespace betacore{
 						std::cout<< "Goal Found" <<"\n";
 						_cost = g[goal];
 					}
-					// this stop exploration 
+					// this stop exploration
 					if(_cost< g[u]){
 						break;
-					}
-				
+					}				
 
 					if(g.find(u) == g.end()){
 						std::cerr<<"The weight is unkown, how can this be?"<<"\n";;
@@ -233,10 +232,10 @@ namespace betacore{
 						}
 					}
 
-					// this stop exploration (if positive only)
-					//if(_cost< g[u]){
-					//	break;
-					//}
+					//this stop exploration (if positive only)
+					if(_cost< g[u]){
+						break;
+					}
 
 
 					if(g.find(u) == g.end()){
