@@ -33,7 +33,7 @@
 			"request": "launch",
 			"program": "${workspaceRoot}/bin/driver_puzzel.exe",
 			"args": [
-				"2"
+				"6"
 			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceRoot}",

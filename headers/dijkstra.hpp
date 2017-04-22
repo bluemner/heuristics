@@ -69,8 +69,7 @@ namespace betacore{
 	//implement Dijkstra algorithm
 	template<typename T, typename I>
 	class Dijkstra{
-		private:
-			//std::priority_queue<dijkstra_priority_queue<T,I>,std::vector<dijkstra_priority_queue<T,I>>, comparator<T,I>> frontier; // keeps track of priority
+		private:			
 			std::priority_queue<std::pair<T,I>,std::vector<std::pair<T,I>>, std::greater<std::pair<T,I>> > frontier; // keeps track of priority
 			std::set<I> current; // keeps track of frontier
 			std::set<I> explored; // explored nodes
@@ -80,9 +79,10 @@ namespace betacore{
 
 			void do_successor(I u, I ui, T _cost){
 						// ui not in E and ui not in f
+						T new_cost = cost(u,ui);
 						if(explored.find(ui) == explored.end() && current.find(ui) == current.end())
 						{
-								g[ui]= g[u] + cost(u,ui);
+								g[ui]= g[u] +new_cost ;
 								if(g[ui]> _cost){ // if we have our goal then we see if any paths can be added 
 									return;
 								}
@@ -95,20 +95,20 @@ namespace betacore{
 						}
 						// ui in F
 						else if(current.find(ui) != current.end()){
-							if( g[u] + cost(u,ui) < g[ui] ){
-								g[ui] = g[u] + cost(u,ui);
+							if( g[u] + new_cost < g[ui] ){
+								g[ui] = g[u] +new_cost;
 								_path[ui] = u;
 							// /	std::cout<<"+adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
-							}else if(g[u] + cost(u,ui) == g[ui]){
+							}else if(g[u] + new_cost == g[ui]){
 								_path[ui] = u;
 							}
 						}
 						// ui in E
 						else if(explored.find(ui) != explored.end())
 						{
-							if( g[u] + cost(u,ui) < g[ui] ){
-								explored.erase(explored.find(ui));
-								//frontier.push(ui);
+							if( g[u] + new_cost < g[ui] ){
+								//std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<"\n";
+								//explored.erase(explored.find(ui));						
 								frontier.push(std::make_pair(g[ui],ui));
 								current.insert(u);
 							//std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
@@ -117,9 +117,6 @@ namespace betacore{
 							std::cerr<< "bug"<<"\n";
 						}
 			}
-
-			 
-
 			void join_all(std::vector<std::thread>& v)
 			{
 				for (std::vector<std::thread>::iterator it = v.begin() ; it != v.end(); ++it){
@@ -271,10 +268,10 @@ namespace betacore{
 					
 					u = std::get<1>(frontier.top()); // get next node
 					//std::cout<<"Node U::"<< u<<"\n";
-						frontier.pop(); // move remove the next from the que
+					frontier.pop(); // move remove the next from the que
 
-					if(current.find(u)!= current.end())
-						current.erase(current.find(u));
+					// if(current.find(u)!= current.end())
+					// 	current.erase(current.find(u));
 					//if u is the goal is it has a smaller cost
 					for(auto goal : goal_v){
 						if( u == goal && g[goal]< _cost)
@@ -307,10 +304,14 @@ namespace betacore{
 					Succ(u,successor);
 					std::vector<std::thread> thread_list;
 					for ( auto s : successor ) {
-							I ui = s.get_target();//.get_id();
+						I ui = s.get_target();//.get_id();
 					
-						//do_successor();
-						thread_list.push_back(std::thread(&betacore::Dijkstra<T,I>::do_successor,this,u,ui,_cost)); //,std::ref(path)
+						do_successor(u,ui,_cost);
+						// try{
+						// thread_list.push_back(std::thread(&betacore::Dijkstra<T,I>::do_successor,this,u,ui,_cost)); //,std::ref(path)
+						// }catch(const std::exception& e){
+						// 		std::cerr<<"Problem with thread" <<std::endl;
+						// }
 					}
 					join_all(thread_list);
 					//path = this->_path;

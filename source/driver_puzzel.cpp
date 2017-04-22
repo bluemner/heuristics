@@ -55,9 +55,9 @@ T cost_check_h(I ui) {
 		}
 	}
 
-	if (n[n.length() - 1] != e) {
-		++cost;
-	}
+	// if (n[n.length() - 1] != e) {
+	// 	++cost;
+	// }
 	return cost;
 }
 //Node this has to be type T
