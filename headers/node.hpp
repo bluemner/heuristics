@@ -34,6 +34,7 @@ namespace betacore{
 				this->id = id;
 				this->name = name;
 			}
+			
 			std::string get_name(){
 				return this->name;
 			}

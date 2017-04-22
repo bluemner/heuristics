@@ -77,6 +77,7 @@ namespace betacore{
 				source = nullptr;
 				next_id = 0;
 			}
+			
 			~Graph(){
 				if(source != nullptr){
 					delete source;
@@ -95,6 +96,16 @@ namespace betacore{
 			void get_edges(std::vector<betacore::Edge<T,I>> &edges){
 					edges.push_back(this->edges);
 			}
+			void add_edge(Edge<T,I> &edge)
+			{
+				for(auto e : this-> edges){
+					if(e == edge ){
+						return;
+					}
+						
+				}
+				this->edges.push_back(edge);
+			}
 			Node<I> get_node(I id){
 				auto pred = [id](const Node<I> &item) {
 					return item.get_id() == id;
@@ -102,8 +113,38 @@ namespace betacore{
 				auto n = std::find(this->nodes.begin(), this->nodes.end(), pred);
 				return ( n != this->nodes.end())?n:NULL;
 			}
-			void add_node(){
-
+			std::string get_node_name(I id){
+				for(auto n : this->nodes ){
+					if(n.get_id() == id){
+						 std::string s(n.get_name());
+						return s;
+					}
+				}
+				return "";
+			}
+			I contains(std::string name){
+				for(auto n : this->nodes){
+					if(n.get_name() == name){
+						return n.get_id();
+					}
+				}
+				return 0;
+			}
+			void add_node(std::string name){
+				for(auto n : this->nodes){
+					if(n.get_name() == name){
+						return;
+					}
+				}
+				Node<I> node(get_next_id(), name );
+				this->nodes.push_back(node);
+			}
+			void add_node(Node<I> &node){
+				for(auto n : this->nodes){
+					if(n.get_name() == node.get_name()){
+						return;
+					}
+				}
 				this->nodes.push_back(node);
 			}
 			void remove_node(I id){
@@ -131,11 +172,20 @@ namespace betacore{
 			I get_source(){
 				return this->source->get_id();
 			}
+
+			void set_source(Node<I> &node){
+				source= new Node<I>(node.get_id(), node.get_name());
+			}
+
 			I get_next_id(){
 				return next_id++;
 			}
 			void get_targets(std::vector<I> &targets){
 				targets.insert(std::end(targets), std::begin(this->targets), std::end(this->targets));
+			}
+
+			void add_target(I node){
+				this->targets.push_back(node);
 			}
 
 			//Running time O(N)
@@ -153,7 +203,7 @@ namespace betacore{
 					std::cout<< "Edge:" << e.get_source() << "->" << e.get_target() << " cost:"<< e.get_cost() << std::endl;
 				}
 				for(auto n : this->nodes){
-					std::cout<<"Nodes:" <<n.get_id() << std::endl;
+					std::cout<<"Nodes:" <<n.get_id() << "\t" <<n.get_name() << std::endl;
 				}
 			}
 	};

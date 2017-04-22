@@ -48,6 +48,12 @@ namespace betacore{
 			T get_cost(){
 				return this->cost;
 			}
+			bool operator==(const Edge<T,I> &rhs){
+				return (this->source == rhs.source &&
+					this->target == rhs.target&&
+				this->cost == rhs.cost
+				);
+			}
 	};
 }
 #endif
