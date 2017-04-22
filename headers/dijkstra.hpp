@@ -22,6 +22,7 @@
  */
 #ifndef _betacore_dijkstra_hpp_
 #define _betacore_dijkstra_hpp_
+
 #include <string>
 #include <sstream>
 #include <vector>
@@ -37,6 +38,7 @@
 #include "./node.hpp"
 #include "./edge.hpp"
 #include "./graph.hpp"
+#include <functional>
 
 namespace betacore{
 	//Errors
@@ -73,11 +75,10 @@ namespace betacore{
 			std::set<I> current; // keeps track of frontier
 			std::set<I> explored; // explored nodes
 			std::map<I,T> g;
-			std::map<I,T> path;
+			
 			std::function<T( I u, I ui)> cost;
 
-			void do_successor(I u, I ui, T _cost){
-			
+			void do_successor(I u, I ui, T _cost, std::map<I,I> &_path){
 						// ui not in E and ui not in f
 						if(explored.find(ui) == explored.end() && current.find(ui) == current.end())
 						{
@@ -88,7 +89,7 @@ namespace betacore{
 								//frontier.push(ui);
 								frontier.push(std::make_pair(g[ui],ui));
 								current.insert(ui);
-								path[ui]=u;
+								_path[ui]=u;
 							// /	std::cout<<"Adding to frontier node:"<<ui <<" cost:"<< g[ui]<<"\n";
 							
 						}
@@ -96,10 +97,10 @@ namespace betacore{
 						else if(current.find(ui) != current.end()){
 							if( g[u] + cost(u,ui) < g[ui] ){
 								g[ui] = g[u] + cost(u,ui);
-								path[ui] = u;
+								_path[ui] = u;
 							// /	std::cout<<"+adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
 							}else if(g[u] + cost(u,ui) == g[ui]){
-								path[ui] = u;
+								_path[ui] = u;
 							}
 						}
 						// ui in E
@@ -149,7 +150,7 @@ namespace betacore{
 				frontier.push(std::make_pair(0,source));
 				current.insert(source);
 				//std::map<I,T> g;
-				this->path = path;
+				
 				g[source] =(T) cost(source,source);
 				while(!frontier.empty()){
 					if( frontier.empty() ){
@@ -257,6 +258,7 @@ namespace betacore{
 			 )
 			 {
 				this->cost = cost;
+		
 				I u;
 				T _cost = (T) std::numeric_limits<T>::max();
 				frontier.push(std::make_pair(0,source));
@@ -308,9 +310,10 @@ namespace betacore{
 							I ui = s.get_target();//.get_id();
 					
 						//do_successor();
-						thread_list.push_back(std::thread(&betacore::Dijkstra<T,I>::do_successor,this,u,ui,_cost));
+						thread_list.push_back(std::thread(&betacore::Dijkstra<T,I>::do_successor,this,u,ui,_cost,std::ref(path)));
 					}
 					join_all(thread_list);
+					//path = this->_path;
 					
 				}//while(true);
 				 std::cout<< "explored node count:"<< explored.size() <<"\n";
