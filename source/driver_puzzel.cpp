@@ -64,7 +64,7 @@ T cost_check_h(I ui) {
 T cost(I u, I ui){
 	if(u<0 && ui < 0){
 		//To Do exception
-	}else if(u <0){
+	}else if(u==ui){
 		return cost_check_h(ui); //return the cost for the heuristic function
 	}
 	return cost_check_g(u,ui) + cost_check_h(ui);
@@ -102,9 +102,8 @@ void successor(I &node, std::vector<betacore::Edge<T,I>> &result){
 				if( contains!=0){
 					target_id = contains;	
 				}else{
-					target_id = G.get_next_id();	
+					target_id = G.get_next_id();
 				}
-								
 				betacore::Node<I> target_node(target_id,temp);
 				G.add_node(target_node);
 				//Get cost to node
@@ -112,11 +111,13 @@ void successor(I &node, std::vector<betacore::Edge<T,I>> &result){
 				//Add Edge
 				betacore::Edge<T,I> edge(node,target_id,cst);
 				G.add_edge(edge);
-				result.push_back(edge);
+				result.push_back(edge);					
+				
 			}
 		
 		}
 	}
+	
 }
 
 std::string make_source_string(int size){
@@ -188,7 +189,7 @@ int main (int argc, char * argv[]){
 			double cpu = (end_cpu - start_cpu) / (double)CLOCKS_PER_SEC ;
 			
 			std::cout<< "cpu time(includes std::cout):\t" <<cpu<<"s" << std::endl;
-			G.print();
+			//G.print();
 		}catch(const std::exception& e){
 			std::cout<<"Problem with algorithm" <<std::endl;
 	 	}

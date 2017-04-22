@@ -94,7 +94,7 @@ namespace betacore{
 				frontier.push(std::make_pair(0,source));
 				current.insert(source);
 				std::map<I,T> g;
-				g[source] =(T) cost(-1,source);
+				g[source] =(T) cost(source,source);
 				while(!frontier.empty()){
 					if( frontier.empty() ){
 						std::cerr<<"The fronter is empty, how can this be?"<<"\n";;
@@ -205,14 +205,11 @@ namespace betacore{
 				frontier.push(std::make_pair(0,source));
 				current.insert(source);
 				std::map<I,T> g;
-				g[source] =(T) 0;
+				g[source] =(T) cost(source,source);
 				I _goal = goal_v.at(0);
 				while(!frontier.empty()){
 
-					// if( frontier.empty() ){
-					// 	std::cerr<<"The fronter is empty, how can this be?"<<std::endl;;
-					// 	throw Dijkstra_Exception();
-					// }
+					
 					u = std::get<1>(frontier.top()); // get next node
 					//std::cout<<"Node U::"<< u<<"\n";
 						frontier.pop(); // move remove the next from the que
@@ -271,6 +268,8 @@ namespace betacore{
 								g[ui] = g[u] + cost(u,ui);
 								path[ui] = u;
 							// /	std::cout<<"+adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
+							}else if(g[u] + cost(u,ui) == g[ui]){
+								path[ui] = u;
 							}
 						}
 						// ui in E
