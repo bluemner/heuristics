@@ -24,8 +24,10 @@
 #define _betacore_node_hpp_
 
 namespace betacore{
+
 	template<typename I>
 	class Node{
+	
 		private:
 		I id;
 		std::string name;

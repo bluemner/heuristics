@@ -46,18 +46,25 @@ T cost_check_h(I ui) {
 	//count A's to the right of B
 	std::string n(G.get_node_name(ui));
 	bool b_found= false;
-	for (unsigned int  i = 0; i < n.length(); i++) {
+	unsigned int size =(unsigned int) ((int)  (n.length()-1)/2);
+	for (unsigned int  i = 0; i < size; i++) {
 		if(b_found == false && n[i] == b){
 			b_found = true;
 		}
 		if(b_found && n[i] == a){
-			++cost;
+			cost= 2 + cost;
 		}
+		// if(n[i]!= a){
+		// 	cost+=3;
+		// }
+		// if(n[i+size] !=b){
+		// 	cost+=2;
+		// }
 	}
 
-	// if (n[n.length() - 1] != e) {
-	// 	++cost;
-	// }
+	if (n[n.length() - 1] != e) {
+		++cost;
+	}
 	return cost;
 }
 //Node this has to be type T
@@ -101,17 +108,23 @@ void successor(I &node, std::vector<betacore::Edge<T,I>> &result){
 				I target_id;
 				if( contains!=0){
 					target_id = contains;	
+					
 				}else{
 					target_id = G.get_next_id();
+					betacore::Node<I> target_node(target_id,temp);
+					G.add_node(target_node);
 				}
-				betacore::Node<I> target_node(target_id,temp);
-				G.add_node(target_node);
-				//Get cost to node
-				T cst = cost(node,target_id);
-				//Add Edge
-				betacore::Edge<T,I> edge(node,target_id,cst);
-				G.add_edge(edge);
-				result.push_back(edge);					
+				if(G.contains(node, target_id) || node ==target_id){
+					continue;
+				}else{
+				
+					//Get cost to node
+					T cst = cost(node,target_id);
+					//Add Edge
+					betacore::Edge<T,I> edge(node,target_id,cst);
+					G.add_edge(edge);
+					result.push_back(edge);	
+				}		
 				
 			}
 		
@@ -127,6 +140,8 @@ std::string make_source_string(int size){
 		temp.at(i)='B';
 		temp.at(i+size)='A';
 	}
+	//				  EBBBBBAAAAAAB
+	//std::string temp("AAAAAEBBBBBAB");
 	return temp;
 }
 std::string make_goal_string(int size){
@@ -165,11 +180,10 @@ int main (int argc, char * argv[]){
 		std::cout<<"Inital state of graph (remaining graph will be created during run)"<<std::endl;
 		G.print();
 
-		//std::cout<< "Source:\t" << source <<std::endl;
-		//std::cout<< "Target:\t" << target <<std::endl;
-		//std::vector<betacore::Edge<T,I>> result;
-		//successor(source_id,result);
-		//G.print();
+		// std::vector<betacore::Edge<T,I>> result;
+		// successor(source_id, result);
+		// G.print();
+
 		std::cout<<"Running A*" <<std::endl;
 		try{
 			std::map<I,I> path;

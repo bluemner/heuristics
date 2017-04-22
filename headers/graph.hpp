@@ -26,7 +26,17 @@
 #include "./edge.hpp"
 #include <vector>
 #include <iostream>
+#include <map>
+#include <string>
+#include <functional>
 namespace betacore{
+
+	class strless{
+		public:
+			bool operator () (const std::string &rhs, const std::string &lhs){
+				return rhs < lhs;
+			}
+	};
 	template<typename T, typename I>
 	class Graph{
 		private:
@@ -34,6 +44,8 @@ namespace betacore{
 			std::vector<betacore::Edge<T,I>> edges;
 			betacore::Node<I> * source;
 			std::vector<I> targets;
+			std::map< std::string , I > node_names;
+			std::set<I> edges_hash;
 			I next_id;
 			void parse_line(std::string &line){
 				std::stringstream sstream(line);
@@ -47,7 +59,7 @@ namespace betacore{
 						vals.push_back(item);
 					}//endif
 				}//else while
-				
+
 				if(type =='e' || type == 'E'){
 					I source =	(I) std::stoll(vals.at(0),0,10);
 					I target =  (I) std::stoll(vals.at(1),0,10);
@@ -76,8 +88,9 @@ namespace betacore{
 			Graph(){
 				source = nullptr;
 				next_id = 0;
+
 			}
-			
+
 			~Graph(){
 				if(source != nullptr){
 					delete source;
@@ -96,14 +109,25 @@ namespace betacore{
 			void get_edges(std::vector<betacore::Edge<T,I>> &edges){
 					edges.push_back(this->edges);
 			}
+			bool contains(I source, I target){
+				
+				// for(auto e : this-> edges){
+				// 	if(e.get_source() == source && e.get_target() == target ){
+				// 		return true;
+				// 	}
+
+				// }
+				
+				auto temp = edges_hash.find(source ^ target );
+				if(temp != edges_hash.end()){
+					return true;
+				}
+				return false;
+			}
 			void add_edge(Edge<T,I> &edge)
 			{
-				for(auto e : this-> edges){
-					if(e == edge ){
-						return;
-					}
-						
-				}
+				
+				this->edges_hash.insert( edge.get_source() ^ edge.get_target() );
 				this->edges.push_back(edge);
 			}
 			Node<I> get_node(I id){
@@ -123,29 +147,23 @@ namespace betacore{
 				return "";
 			}
 			I contains(std::string name){
-				for(auto n : this->nodes){
-					if(n.get_name() == name){
-						return n.get_id();
-					}
+
+				auto temp = this->node_names.find(name);
+				if( temp !=this->node_names.end()){
+					return node_names[name];
 				}
 				return 0;
 			}
 			void add_node(std::string name){
-				for(auto n : this->nodes){
-					if(n.get_name() == name){
-						return;
-					}
-				}
+
 				Node<I> node(get_next_id(), name );
+				this->node_names[name]=node;
 				this->nodes.push_back(node);
 			}
 			void add_node(Node<I> &node){
-				for(auto n : this->nodes){
-					if(n.get_name() == node.get_name()){
-						return;
-					}
-				}
 				this->nodes.push_back(node);
+				std::string name(node.get_name());
+				this->node_names[name] = node.get_id();
 			}
 			void remove_node(I id){
 				auto pred = [id](const Node<I> &item) {
@@ -192,7 +210,7 @@ namespace betacore{
 			T cost(I u, I ui){
 				for(auto e : this->edges){
 					if( e.get_source() == u && e.get_target() == ui){
-						
+
 						return e.get_cost();
 					}
 				}

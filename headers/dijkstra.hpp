@@ -80,7 +80,9 @@ namespace betacore{
 			void do_successor(I u, I ui, T _cost){
 						// ui not in E and ui not in f
 						T new_cost = cost(u,ui);
-						if(explored.find(ui) == explored.end() && current.find(ui) == current.end())
+						bool ex = explored.find(ui) != explored.end() ;
+						bool front = current.find(ui) != current.end();
+						if( !ex && !front )
 						{
 								g[ui]= g[u] +new_cost ;
 								if(g[ui]> _cost){ // if we have our goal then we see if any paths can be added 
@@ -89,12 +91,10 @@ namespace betacore{
 								//frontier.push(ui);
 								frontier.push(std::make_pair(g[ui],ui));
 								current.insert(ui);
-								_path[ui]=u;
-							// /	std::cout<<"Adding to frontier node:"<<ui <<" cost:"<< g[ui]<<"\n";
-							
+								_path[ui]=u;							
 						}
 						// ui in F
-						else if(current.find(ui) != current.end()){
+						else if(front){
 							if( g[u] + new_cost < g[ui] ){
 								g[ui] = g[u] +new_cost;
 								_path[ui] = u;
@@ -104,7 +104,7 @@ namespace betacore{
 							}
 						}
 						// ui in E
-						else if(explored.find(ui) != explored.end())
+						else if(ex)
 						{
 							if( g[u] + new_cost < g[ui] ){
 								//std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<"\n";
@@ -263,6 +263,7 @@ namespace betacore{
 				
 				g[source] =(T) cost(source,source);
 				I _goal = goal_v.at(0);
+				bool quit = false;
 				while(!frontier.empty()){
 
 					
@@ -279,6 +280,7 @@ namespace betacore{
 						//	std::cout<< "Min Goal Found:"<< goal <<"\tcost:" << g[goal] <<"\n";
 							_cost = g[goal];
 							_goal = goal;
+							quit = true;
 						}
 						else{
 						//	std::cout<< "Other Goal Found:"<< goal <<"\tcost:" << g[goal] <<"\n";
@@ -286,15 +288,15 @@ namespace betacore{
 					}
 
 					//this stop exploration (if positive only)
-					if(_cost< g[u]){
+					if(_cost< g[u] || quit){
 						break;
 					}
 
 
-					if(g.find(u) == g.end()){
-						std::cerr<<"The weight is unkown, how can this be?"<<"\n";;
-						throw Dijkstra_Exception();
-					}
+					// if(g.find(u) == g.end()){
+					// 	std::cerr<<"The weight is unkown, how can this be?"<<"\n";;
+					// 	throw Dijkstra_Exception();
+					// }
 
 					explored.insert(u);
 					std::vector<Edge<T,I>> successor;
@@ -302,7 +304,7 @@ namespace betacore{
 					// Get successor
 					//graph.successor(u, successor);
 					Succ(u,successor);
-					std::vector<std::thread> thread_list;
+					//std::vector<std::thread> thread_list;
 					for ( auto s : successor ) {
 						I ui = s.get_target();//.get_id();
 					
@@ -313,7 +315,7 @@ namespace betacore{
 						// 		std::cerr<<"Problem with thread" <<std::endl;
 						// }
 					}
-					join_all(thread_list);
+					//join_all(thread_list);
 					//path = this->_path;
 					
 				}//while(true);
