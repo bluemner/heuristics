@@ -33,6 +33,7 @@
 #include <set>
 #include <functional>
 #include <limits>
+#include <thread>
 #include "./node.hpp"
 #include "./edge.hpp"
 #include "./graph.hpp"
@@ -71,7 +72,59 @@ namespace betacore{
 			std::priority_queue<std::pair<T,I>,std::vector<std::pair<T,I>>, std::greater<std::pair<T,I>> > frontier; // keeps track of priority
 			std::set<I> current; // keeps track of frontier
 			std::set<I> explored; // explored nodes
-			T cost();
+			std::map<I,T> g;
+			std::map<I,T> path;
+			std::function<T( I u, I ui)> cost;
+
+			void do_successor(I u, I ui, T _cost){
+			
+						// ui not in E and ui not in f
+						if(explored.find(ui) == explored.end() && current.find(ui) == current.end())
+						{
+								g[ui]= g[u] + cost(u,ui);
+								if(g[ui]> _cost){ // if we have our goal then we see if any paths can be added 
+									return;
+								}
+								//frontier.push(ui);
+								frontier.push(std::make_pair(g[ui],ui));
+								current.insert(ui);
+								path[ui]=u;
+							// /	std::cout<<"Adding to frontier node:"<<ui <<" cost:"<< g[ui]<<"\n";
+							
+						}
+						// ui in F
+						else if(current.find(ui) != current.end()){
+							if( g[u] + cost(u,ui) < g[ui] ){
+								g[ui] = g[u] + cost(u,ui);
+								path[ui] = u;
+							// /	std::cout<<"+adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
+							}else if(g[u] + cost(u,ui) == g[ui]){
+								path[ui] = u;
+							}
+						}
+						// ui in E
+						else if(explored.find(ui) != explored.end())
+						{
+							if( g[u] + cost(u,ui) < g[ui] ){
+								explored.erase(explored.find(ui));
+								//frontier.push(ui);
+								frontier.push(std::make_pair(g[ui],ui));
+								current.insert(u);
+							//std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
+							}
+						}else{
+							std::cerr<< "bug"<<"\n";
+						}
+			}
+
+			 
+
+			void join_all(std::vector<std::thread>& v)
+			{
+				for (std::vector<std::thread>::iterator it = v.begin() ; it != v.end(); ++it){
+					it->join();
+				}
+			}
 		public:
 			Dijkstra(){
 			}
@@ -89,11 +142,14 @@ namespace betacore{
 				std::function<void(I &node, std::vector<Edge<T,I>> &result)> &Succ
 			 )
 			 {
+				this->cost = cost;
+				
 				I u;				
 				T _cost = (T) std::numeric_limits<T>::max();
 				frontier.push(std::make_pair(0,source));
 				current.insert(source);
-				std::map<I,T> g;
+				//std::map<I,T> g;
+				this->path = path;
 				g[source] =(T) cost(source,source);
 				while(!frontier.empty()){
 					if( frontier.empty() ){
@@ -200,11 +256,12 @@ namespace betacore{
 				std::function<void(I &node, std::vector<Edge<T,I>> &result)> &Succ
 			 )
 			 {
+				this->cost = cost;
 				I u;
 				T _cost = (T) std::numeric_limits<T>::max();
 				frontier.push(std::make_pair(0,source));
 				current.insert(source);
-				std::map<I,T> g;
+				
 				g[source] =(T) cost(source,source);
 				I _goal = goal_v.at(0);
 				while(!frontier.empty()){
@@ -246,46 +303,15 @@ namespace betacore{
 					// Get successor
 					//graph.successor(u, successor);
 					Succ(u,successor);
+					std::vector<std::thread> thread_list;
 					for ( auto s : successor ) {
-						I ui = s.get_target();//.get_id();
-						// ui not in E and ui not in f
-						if(explored.find(ui) == explored.end() && current.find(ui) == current.end())
-						{
-								g[ui]= g[u] + cost(u,ui);
-								if(g[ui]> _cost){ // if we have our goal then we see if any paths can be added 
-									continue;
-								}
-								//frontier.push(ui);
-								frontier.push(std::make_pair(g[ui],ui));
-								current.insert(ui);
-								path[ui]=u;
-							// /	std::cout<<"Adding to frontier node:"<<ui <<" cost:"<< g[ui]<<"\n";
-							
-						}
-						// ui in F
-						else if(current.find(ui) != current.end()){
-							if( g[u] + cost(u,ui) < g[ui] ){
-								g[ui] = g[u] + cost(u,ui);
-								path[ui] = u;
-							// /	std::cout<<"+adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
-							}else if(g[u] + cost(u,ui) == g[ui]){
-								path[ui] = u;
-							}
-						}
-						// ui in E
-						else if(explored.find(ui) != explored.end())
-						{
-							if( g[u] + cost(u,ui) < g[ui] ){
-								explored.erase(explored.find(ui));
-								//frontier.push(ui);
-								frontier.push(std::make_pair(g[ui],ui));
-								current.insert(source);
-							//std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
-							}
-						}else{
-							std::cerr<< "bug"<<"\n";
-						}
+							I ui = s.get_target();//.get_id();
+					
+						//do_successor();
+						thread_list.push_back(std::thread(&betacore::Dijkstra<T,I>::do_successor,this,u,ui,_cost));
 					}
+					join_all(thread_list);
+					
 				}//while(true);
 				 std::cout<< "explored node count:"<< explored.size() <<"\n";
 				// for(auto e: explored){
@@ -311,6 +337,8 @@ namespace betacore{
 				std::cout<<"cost:"<< g[u] <<"\n";
 
 			}
+
+			
 	};
 }
 #endif

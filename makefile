@@ -23,7 +23,7 @@
 # ==============================================================================
 OUTPUT_DIR= bin
 COMPILER = g++
-FLAGS =-W -ggdb -std=c++11
+FLAGS =-W -ggdb -std=c++11 -pthread
 SOURCE_DIR = source/
 HEADERS_DIR = headers/
 

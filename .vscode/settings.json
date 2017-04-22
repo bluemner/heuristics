@@ -51,6 +51,9 @@
 		"xfunctional": "cpp",
 		"chrono": "cpp",
 		"ctime": "cpp",
-		"ratio": "cpp"
+		"ratio": "cpp",
+		"memory": "cpp",
+		"xthread": "cpp",
+		"thread": "cpp"
 	}
 }
