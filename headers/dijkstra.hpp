@@ -75,10 +75,10 @@ namespace betacore{
 			std::set<I> current; // keeps track of frontier
 			std::set<I> explored; // explored nodes
 			std::map<I,T> g;
-			
+			std::map<I,I> _path;
 			std::function<T( I u, I ui)> cost;
 
-			void do_successor(I u, I ui, T _cost, std::map<I,I> &_path){
+			void do_successor(I u, I ui, T _cost){
 						// ui not in E and ui not in f
 						if(explored.find(ui) == explored.end() && current.find(ui) == current.end())
 						{
@@ -258,7 +258,7 @@ namespace betacore{
 			 )
 			 {
 				this->cost = cost;
-		
+				
 				I u;
 				T _cost = (T) std::numeric_limits<T>::max();
 				frontier.push(std::make_pair(0,source));
@@ -310,7 +310,7 @@ namespace betacore{
 							I ui = s.get_target();//.get_id();
 					
 						//do_successor();
-						thread_list.push_back(std::thread(&betacore::Dijkstra<T,I>::do_successor,this,u,ui,_cost,std::ref(path)));
+						thread_list.push_back(std::thread(&betacore::Dijkstra<T,I>::do_successor,this,u,ui,_cost)); //,std::ref(path)
 					}
 					join_all(thread_list);
 					//path = this->_path;
@@ -325,16 +325,16 @@ namespace betacore{
 				// 	std::cout<< "frontier node:"<< c <<"\n";
 				// }
 				u = _goal;
-				I mp = path[u];
+				I mp = _path[u];
 				std::cout<<"path:\n";				
 				std::cout<< u <<"<-";
 				while (mp !=source){
-					if(!path.count(mp)){
+					if(!_path.count(mp)){
 						std::cerr<<"Path from sink doesn't lead back to source" <<"\n";
 						throw Dijkstra_Exception();
 					}
 					std::cout<< mp <<"<-";
-					mp = path[mp];
+					mp = _path[mp];
 				}
 				std::cout<< source << "\n";
 				std::cout<<"cost:"<< g[u] <<"\n";
