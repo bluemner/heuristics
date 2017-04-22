@@ -108,7 +108,7 @@ namespace betacore{
 						{
 							if( g[u] + new_cost < g[ui] ){
 								//std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<"\n";
-								//explored.erase(explored.find(ui));						
+								explored.erase(explored.find(ui));						
 								frontier.push(std::make_pair(g[ui],ui));
 								current.insert(u);
 							//std::cout<<"!adding edge:"<<u <<" cost:"<< g[ui]<<"\n"; 
@@ -270,8 +270,8 @@ namespace betacore{
 					//std::cout<<"Node U::"<< u<<"\n";
 					frontier.pop(); // move remove the next from the que
 
-					// if(current.find(u)!= current.end())
-					// 	current.erase(current.find(u));
+					if(current.find(u)!= current.end())
+						current.erase(current.find(u));
 					//if u is the goal is it has a smaller cost
 					for(auto goal : goal_v){
 						if( u == goal && g[goal]< _cost)
