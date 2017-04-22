@@ -1,27 +1,44 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-
-         {
-            "name": "Driver (Windows)",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/bin/driver.exe",
-            "args": [
-                "${workspaceRoot}/data/graph_01.csv"
-            ],
-            "name": "grap_can_n_3_m_2 (Windows)",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/bin/driver.exe",
-            "args": [
-                "${workspaceRoot}/data/graph_can_n_3_m_2.csv"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceRoot}",
-            "environment": [],
-            "externalConsole": false
-        }
-
-    ]
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "grap_can_n_3_m_2 (Windows)",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "${workspaceRoot}/bin/driver.exe",
+			"args": [
+				"${workspaceRoot}/data/graph_can_n_3_m_2.csv"
+			],
+			"stopAtEntry": false,
+			"cwd": "${workspaceRoot}",
+			"environment": [],
+			"externalConsole": false
+		},
+		{
+			"name": "Driver (Windows)",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "${workspaceRoot}/bin/driver.exe",
+			"args": [
+				"${workspaceRoot}/data/graph_01.csv"
+			],
+			"stopAtEntry": false,
+			"cwd": "${workspaceRoot}",
+			"environment": [],
+			"externalConsole": false
+		},
+		{
+			"name": "puzzle size 2 (Windows)",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "${workspaceRoot}/bin/driver_puzzel.exe",
+			"args": [
+				"8"
+			],
+			"stopAtEntry": false,
+			"cwd": "${workspaceRoot}",
+			"environment": [],
+			"externalConsole": false
+		}
+	]
 }

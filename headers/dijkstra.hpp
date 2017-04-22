@@ -305,7 +305,7 @@ namespace betacore{
 						std::cerr<<"Path from sink doesn't lead back to source" <<"\n";
 						throw Dijkstra_Exception();
 					}
-					std::cout<< mp <<"<-";
+					std::cout<< mp <<"<-\n";
 					mp = path[mp];
 				}
 				std::cout<< source << "\n";

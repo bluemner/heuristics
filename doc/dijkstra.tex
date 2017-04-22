@@ -35,13 +35,16 @@
 \maketitle
 % //Start
 \begin{abstract}
-Analysis and of c++11 implementation of Dijkstra's algorithm. 
+Analysis of c++11 implementation of Dijkstra's algorithm. 
 
 \end{abstract}
+
 % ==========================================================================================================================
 %  Algorithm Section 1
 % ==========================================================================================================================
 \section[Algorithm]{Algorithm}
+
+Algorithm taken from class with some additional information for wiki \cite{ Wikipedia}.
 \begin{algorithm}
 
 \KwData{  \textit{source:} source node, \textit{$goal_v$:} collection or goals,\\ \textit{cost:} function that returns cost between edge $u \to u_i$, \\ \textit{succ:} function that returns the neighbors of node u   }
@@ -99,9 +102,9 @@ Analysis and of c++11 implementation of Dijkstra's algorithm.
 %  Implementation Section 2
 % ==========================================================================================================================
 \section[Implementation]{Implementation}
-The implementation of Dijkstra utilizes several of the c++11 standard library. c++11
-included several enhancements to the predefined data structures since the last revision. Below is how the
- data structures are defined and the running time of their. The algorithm will be implemented under betacore namespace
+The implementation of Dijkstra utilizes several of the c++11 standard library data structures,
+Below is how the data structures are defined and the running time of each function\cite{ northwestern}.
+The core algorithm will be implemented under the betacore namespace.
 %----------------------------------------
 %	Std::Vector
 % ---------------------------------------
@@ -199,7 +202,7 @@ s.end() & Return an iterator pointing one past the last element. & O(1)
 %----------------------------------------
 %	Std::Map
 % ---------------------------------------
-\subsection{std::Map}
+\subsection{std::Map} 
 \begin{tabular}{ p{5cm} p{7cm}  p{5cm} }
 \textbf{Constructors} & \textbf{Description} & \textbf{Big - OH}\\
 map$<$ key\_type, value\_type, key\_compare $>$ m; & Make an empty map. key\_compare should be a binary predicate for ordering the keys. It's optional and will default to a function that uses operator$<$. & O(1)\\
@@ -252,6 +255,49 @@ template <class T1,class T2>
     return ( pair<T1,T2>(x,y) );
   }
 \end{lstlisting}
+function to make a std::pair
+
+%----------------------------------------
+%	Betacore::Node
+% ---------------------------------------
+\subsection{Betacore::Node}
+\begin{lstlisting}
+	template<typename I>
+	class Node{
+		private:
+		I id;
+		std::string name;
+		public:
+			Node(I &id,std::string &name)
+			std::string get_name()
+			void setName(const std::string &name)
+			I get_id()
+	};
+\end{lstlisting}
+Helper class that can store minimal information about a node, 
+more information can stored in the csv file
+%----------------------------------------
+%	Betacore::Edge
+% ---------------------------------------
+\subsection{Betacore::Edge}
+\begin{lstlisting}
+	template<typename T, typename I>
+	class Edge{
+		private:
+			I id;
+			I source;
+			I target;
+			T cost;
+		public:
+			Edge(){}
+			Edge(I &source, I &target, T &cost)
+			I get_source()
+			I get_target()
+			T get_cost()
+	};
+\end{lstlisting}
+Helper class that can store minimal information about a Edge, 
+more information can stored in the csv file
 %----------------------------------------
 %	Betacore::Graph
 % ---------------------------------------
@@ -281,9 +327,9 @@ template <class T1,class T2>
 Betacore::graph is an implementation of a directed graph that reads from a
 modified comma delimited file. This allows for the graph state to change
 without recompiling the code, however this is a potential bottleneck due to
-the read speed of a hard disk. (for larger gig size files this should be
-be modified to a stream and the graph split up into regions.then each region
-only when need thus saving memory ). 
+the read speed of a hard disk (for larger gig size files this should be
+be modified to a stream and the graph split up into regions then load each region
+only when needed, thus saving memory ). 
 
 Template$<$typename T, typename I$>$ allows the precision of the graph type to 
 be determined by the implementation. T being a float, double, or long double
@@ -294,7 +340,7 @@ data types for T and I can have a performance and precision impact on the graph.
 %----------------------------------------
 %	Betacore::Dijkstra
 % ---------------------------------------
-\subsection{Betacore::Dijkstra}
+\subsection{Betacore::Dijkstra}  \label{betadij}
 \begin{lstlisting}
 	struct Dijkstra_Exception : public std::exception {
 		const char * what () const throw () {
@@ -334,16 +380,17 @@ data types for T and I can have a performance and precision impact on the graph.
 	};
 \end{lstlisting}
 
-Betacore::Dijkstra implementation has utilizes the std::priority\_queue (see section \ref{pq}).
-The priority\_queue uses the std::greater function which set the que by the value in edge cost$<$T$>$. We want grater
+Betacore::Dijkstra implementation utilizes the std::priority\_queue (see section \ref{pq}).
+The priority\_queue uses the std::greater function which set the que by the value in edge cost$<$T$>$. The goal is the min value so using the grater function
 so the value in first position will be the smallest, thus the shortest edge$<$T$>$. 
 Limitation of using std::priority\_queue is that their is no contains method. That 
 problem is overcome by keeping a std::set (see section \ref{stdset}) to keep track of nodes in the frontier.
 So the std::priority\_queue frontier keeps the order of the edges and std::set current keeps track of the contains.
 This adds double space complexity but saves from have to implement a new child class of std::priority\_queue. Nodes 
-are know by their index type I and the edges edges by the edge class.
+are know by their index type I and the edges  by the edge class.
 \\
 \\
+
 \begin{lstlisting}
 	std::function<T( I u, I ui)> &cost
 \end{lstlisting}
@@ -362,7 +409,11 @@ that you add the Edge$<$T,I$>$ index I do the vector list.
 
 % \section[Proof of correctness]{Proof of correctness}
 \section{Proof of correctness}
-Note: running time is doesn't include loading from file, its the running time of the algorithm.
+Note: running time doesn't include loading from file, its the running time of the algorithm. 
+Their is an additional graph, not required by assignment,
+that was used to verify the algorithm.
+Due to simplistic nature of the graph\_01 it can show in an ideal case the algorithm takes shortest path (not ideal being negative cycle),
+assuming it is provided by the Succ function(\ref{betadij}). 
 \subsection{Flight Plans}
 
 Sample Run output:
@@ -544,7 +595,9 @@ Sample Run output:
 \end{lstlisting}
 * Note the cpu run time may not appear accurate due to the running system (see System \\ information \ref{sysinfo})
 
-Doing the trace by hand yielded similar results with the min path being BWI $\to$ ORD  $\to$ SFO
+Doing the trace by hand yielded similar results with the min path being BWI $\to$ ORD  $\to$ SFO. in the output 
+the entire search state is dumped (which can hurt performance) so by looking at each choice the algorithm is taking (making sure it's being greedy).
+we can verify the correctness for this instance (if the graph was larger test driven development would be advised ). 
 
 \subsection{Missionaries and Cannibals}
 With run of $n=3$ and $m=2$ \\
@@ -558,8 +611,8 @@ N: Type of node\\
 Name: LHS(Missionaries\_Cannibals)::Boat(Missionaries\_Cannibals)::RHS(Missionaries\_Cannibals)\\
 \\
 Each Edge is source, target, cost\\
-Boat move from LHS $\to$ RHS
-
+The Goal is to move from LHS $\to$ RHS
+\\
 Sample Run output:
 \begin{lstlisting}
 	_______________________________________________________________
@@ -780,7 +833,7 @@ Sample Run output:
 	_______________________________________________________________
 
 \end{lstlisting}
-* Note the cpu run time may not appear accurate due to the running system (see System \\ information \ref{sysinfo})
+* Note the cpu run time may not appear accurate due to the running system (see System  information \ref{sysinfo})
 \\
 \\
 The path\\
@@ -798,7 +851,7 @@ N: Type of node\\
 Name: LHS(Missionaries\_Cannibals)::Boat(Missionaries\_Cannibals)::RHS(Missionaries\_Cannibals)\\
 \\
 Each Edge is source, target, cost\\
-Boat move from LHS $\to$ RHS
+The Goal is to move from LHS $\to$ RHS
 
 Sample Run output:
 \begin{lstlisting}
@@ -1204,7 +1257,7 @@ Sample Run output:
 	_______________________________________________________________
 
 \end{lstlisting}
-* Note the cpu run time may not appear accurate due to the running system (see System \\ information \ref{sysinfo})
+* Note the cpu run time may not appear accurate due to the running system (see System information \ref{sysinfo})
 
 
 45$\leftarrow$43$\leftarrow$40$\leftarrow$35$\leftarrow$32$\leftarrow$29$\leftarrow$26$\leftarrow$20$\leftarrow$13$\leftarrow$7$\leftarrow$4$\leftarrow$1$\leftarrow$0
@@ -1215,7 +1268,7 @@ this problem is 12 and because each edge has a weight of 1 the cost should equal
 
 \subsection{System information}\label{sysinfo}
 clinfo.exe dump of system information. 
-Note im running on cl.exe in debug mode on Windows 10 x64
+Note The above runs where running on cl.exe in debug mode on Windows 10 x64
 \begin{lstlisting}
 Number of platforms:				 1
   Platform Profile:				 FULL_PROFILE
@@ -1416,15 +1469,13 @@ Number of devices:				 2
   Profile:					 FULL_PROFILE
   Version:					 OpenCL 1.2 AMD-APP (2264.11)
   Extensions:					 cl_khr_fp64 cl_amd_fp64 cl_khr_global_int32_base_atomics cl_khr_global_int32_extended_atomics cl_khr_local_int32_base_atomics cl_khr_local_int32_extended_atomics cl_khr_int64_base_atomics cl_khr_int64_extended_atomics cl_khr_3d_image_writes cl_khr_byte_addressable_store cl_khr_gl_sharing cl_ext_device_fission cl_amd_device_attribute_query cl_amd_vec3 cl_amd_printf cl_amd_media_ops cl_amd_media_ops2 cl_amd_popcnt cl_khr_d3d10_sharing cl_khr_spir cl_khr_gl_event 
-
-
-
 \end{lstlisting}
 % //END
 
 \section{ Sources of Error}
 There could be some sources of error in my graph csv files, 
 incorrectly adding edges or mistyping the graph state for the Cannibals and Missionaries.
+
 \bibliographystyle{unsrt}
 \bibliography{bib}
 

@@ -34,6 +34,7 @@ namespace betacore{
 			std::vector<betacore::Edge<T,I>> edges;
 			betacore::Node<I> * source;
 			std::vector<I> targets;
+			I next_id;
 			void parse_line(std::string &line){
 				std::stringstream sstream(line);
 				std::string item;
@@ -74,6 +75,7 @@ namespace betacore{
 		public:
 			Graph(){
 				source = nullptr;
+				next_id = 0;
 			}
 			~Graph(){
 				if(source != nullptr){
@@ -100,7 +102,8 @@ namespace betacore{
 				auto n = std::find(this->nodes.begin(), this->nodes.end(), pred);
 				return ( n != this->nodes.end())?n:NULL;
 			}
-			void add_node(Node<I> &node){
+			void add_node(){
+
 				this->nodes.push_back(node);
 			}
 			void remove_node(I id){
@@ -128,7 +131,9 @@ namespace betacore{
 			I get_source(){
 				return this->source->get_id();
 			}
-
+			I get_next_id(){
+				return next_id++;
+			}
 			void get_targets(std::vector<I> &targets){
 				targets.insert(std::end(targets), std::begin(this->targets), std::end(this->targets));
 			}
