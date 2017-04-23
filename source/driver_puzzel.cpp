@@ -121,7 +121,7 @@ void successor(I &node, std::vector<betacore::Edge<T,I>> &result){
 std::string make_source_string(){
 	//Create string of size
 	std::string temp(size * 2 +1, 'E');
-	for(int i=1;  i < (unsigned int) (size + 1); ++i){
+	for(unsigned int i=1;  i < size + 1; ++i){
 		temp.at(i)='B';
 		temp.at(i+size)='A';
 	}
@@ -132,7 +132,7 @@ std::string make_source_string(){
 std::string make_goal_string(){
 	//Create string of size
 	std::string temp(size * 2 +1, 'E');
-	for(int i=0; i <size; ++i){
+	for(unsigned int i=0; i <size; ++i){
 		temp.at(i)='A';
 		temp.at(i+size)='B';
 	}
@@ -151,8 +151,8 @@ std::string make_random_string(){
 	bool removed_a=false;
 	bool removed_b=false;
 	
-	int skip = (int) dist(e2) + 2  % ( size *2 );
-	for(int i=0; i <size * 2 +1; ++i ){
+	unsigned int skip = (unsigned int) dist(e2) + 2  % ( size *2 );
+	for(unsigned int i=0; i <size * 2 +1; ++i ){
 		
 		 if(skip ==i){
 			vals.erase('E');
