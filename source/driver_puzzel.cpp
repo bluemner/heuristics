@@ -47,19 +47,19 @@ T cost_check_h(I ui) {
 	std::string n(G.get_node_name(ui));
 	bool b_found= false;
 	unsigned int size =(unsigned int) ((int)  (n.length()-1)/2);
-	for (unsigned int  i = 0; i < n.length(); i++) {
-		if(b_found == false && n.at(i) == b){
-			b_found = true;
-		}
-		if(b_found && n.at(i) == a){
-			++cost;
-		}
-		// if(n[i]!= a){
-		// 	cost+=3;
+	for (unsigned int  i = 0; i < size; i++) {
+		// if(b_found == false && n.at(i) == b){
+		// 	b_found = true;
 		// }
-		// if(n[i+size] !=b){
-		// 	cost+=2;
+		// if(b_found && n.at(i) == a){
+		// 	++cost;
 		// }
+		if(n[i]!= a){
+			cost+=1;
+		}
+		if(n[i+size] !=b){
+			cost+=1;
+		}
 	}
 
 	if (n[n.length() - 1] != e) {
@@ -91,23 +91,11 @@ void successor(I &node, std::vector<betacore::Edge<T,I>> &result){
 	std::string n = G.get_node_name(node);
 	std::set<std::string> vals;
 	for(unsigned int  i=0; i< n.length(); i++){		
-		for(unsigned int j=0; j<n.length()-1; j++){
-			std::string temp="";
-			for(unsigned int k =0; k<n.length(); k++){
-				if(k==i){
-					temp+=n[j];
-				}else if(k ==j){
-					temp+=n[i];
-				}else 
-				{
-					temp+=n[k];
-				}
-			}
-			if(temp != n){
-				
-				vals.insert(temp);
-			}
-		
+		for(unsigned int j=0; j<n.length(); j++){
+			std::string temp(n);
+			temp.at(i) = n.at(j);
+			temp.at(j) = n.at(i);
+			vals.insert(temp);
 		}
 	}
 

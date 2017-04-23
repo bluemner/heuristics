@@ -309,17 +309,17 @@ namespace betacore{
 					// Get successor
 					//graph.successor(u, successor);
 					Succ(u,successor);
-					//std::vector<std::thread> thread_list;
+					std::vector<std::thread> thread_list;
 					for ( auto s : successor ) {
 						ui = s.get_target();					
-						do_successor(u,ui,s.get_cost() ,_cost);
-						// try{
-						// thread_list.push_back(std::thread(&betacore::Dijkstra<T,I>::do_successor,this,u,ui,_cost)); //,std::ref(path)
-						// }catch(const std::exception& e){
-						// 		std::cerr<<"Problem with thread" <<std::endl;
-						// }
+						//do_successor(u,ui,s.get_cost() ,_cost);
+						try{
+							thread_list.push_back(std::thread(&betacore::Dijkstra<T,I>::do_successor,this,u,ui,s.get_cost(),_cost)); //,std::ref(path)
+						}catch(const std::exception& e){
+								std::cerr<<"Problem with thread" <<std::endl;
+						}
 					}
-					//join_all(thread_list);
+					join_all(thread_list);
 					//path = this->_path;
 					if(frontier.empty()) std::cout<< "out of nodes" <<std::endl;
 				}//while(true);

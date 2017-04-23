@@ -109,15 +109,7 @@ namespace betacore{
 			void get_edges(std::vector<betacore::Edge<T,I>> &edges){
 					edges.push_back(this->edges);
 			}
-			bool contains(I source, I target){
-				
-				// for(auto e : this-> edges){
-				// 	if(e.get_source() == source && e.get_target() == target ){
-				// 		return true;
-				// 	}
-
-				// }
-				
+			bool contains(I source, I target){		
 				auto temp = edges_hash.find(source ^ target );
 				if(temp != edges_hash.end()){
 					return true;
