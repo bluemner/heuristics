@@ -53,3 +53,9 @@ set file_name=driver_puzzel
 set compilerflags=/Fo.\bin\ /Od /Zi /EHsc 
 set linkerflags=/OUT:bin\%file_name%.exe
 cl.exe %compilerflags% source/%file_name%.cpp /link %linkerflags%
+
+echo building driver_puzzel2
+set file_name=driver_puzzel2
+set compilerflags=/Fo.\bin\  /EHsc 
+set linkerflags=/OUT:bin\%file_name%.exe
+cl.exe %compilerflags% source/driver_puzzel.cpp /link %linkerflags%

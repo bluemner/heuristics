@@ -97,7 +97,18 @@ namespace betacore{
 					source = nullptr;
 				}
 			}
-
+			void clear(){
+					nodes.clear();
+					edges.clear();
+				if(source != nullptr){
+					delete source;
+					source = nullptr;
+				}
+				targets.clear();
+				node_names.clear();
+				edges_hash.clear();
+				next_id = (I) 0;
+			}
 			// &result result vector of neighbor ids
 			void successor(I &node, std::vector<Edge<T,I>> &result){
 				for(auto e : edges){
