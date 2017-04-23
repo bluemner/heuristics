@@ -123,7 +123,7 @@ void successor(I &node, std::vector<betacore::Edge<T,I>> &result){
 			G.add_node(target_node);
 		}
 		if(G.contains(node, target_id) || node ==target_id){
-			std::cout<<"same:" << n << "::" << temp <<std::endl;
+			//std::cout<<"same:" << n << "::" << temp <<std::endl;
 		}else{		
 			//Get cost to node
 			T cst = cost(node,target_id);
