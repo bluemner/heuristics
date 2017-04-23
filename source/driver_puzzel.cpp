@@ -101,7 +101,7 @@ void successor(I &node, std::vector<betacore::Edge<T,I>> &result){
 				betacore::Node<I> target_node(target_id,temp);
 				G.add_node(target_node);
 			}
-			if(G.contains(node, target_id) || node ==target_id){
+			if( node ==target_id){
 				//std::cout<<"same:" << n << "::" << temp <<std::endl;
 			}else{		
 				//Get cost to node
@@ -281,7 +281,7 @@ void run_random_0(std::string source,std::string target){
 }
 void required_run_h(std::string source,std::string target){
 		std::cout<<"_______________________________________________________________"<<std::endl;
-		std::cout<<"Random Start  Heuristics"<<std::endl;
+		std::cout<<" Required Start with Heuristics"<<std::endl;
 		std::cout<<"_______________________________________________________________"<<std::endl;	
 		I source_id = G.get_next_id();
 		betacore::Node<I> source_node(source_id,source);
