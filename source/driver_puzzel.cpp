@@ -8,7 +8,7 @@
 #include "../headers/graph.hpp"
 
 // The evil's of c++ templates
-typedef double T;
+typedef long long T;
 typedef long long I;
 
 betacore::Graph<T, I> G;
@@ -47,12 +47,12 @@ T cost_check_h(I ui) {
 	std::string n(G.get_node_name(ui));
 	bool b_found= false;
 	unsigned int size =(unsigned int) ((int)  (n.length()-1)/2);
-	for (unsigned int  i = 0; i < size; i++) {
-		if(b_found == false && n[i] == b){
+	for (unsigned int  i = 0; i < n.length(); i++) {
+		if(b_found == false && n.at(i) == b){
 			b_found = true;
 		}
-		if(b_found && n[i] == a){
-			cost= 2 + cost;
+		if(b_found && n.at(i) == a){
+			++cost;
 		}
 		// if(n[i]!= a){
 		// 	cost+=3;
@@ -65,7 +65,7 @@ T cost_check_h(I ui) {
 	if (n[n.length() - 1] != e) {
 		++cost;
 	}
-	return cost;
+	return (T) cost;
 }
 //Node this has to be type T
 T cost(I u, I ui){
@@ -89,6 +89,7 @@ T cost_dijkstra(I u, I ui){
 //This fuction can be changed if you want :-) to do some successor thing...
 void successor(I &node, std::vector<betacore::Edge<T,I>> &result){
 	std::string n = G.get_node_name(node);
+	std::set<std::string> vals;
 	for(unsigned int  i=0; i< n.length(); i++){		
 		for(unsigned int j=0; j<n.length()-1; j++){
 			std::string temp="";
@@ -103,34 +104,36 @@ void successor(I &node, std::vector<betacore::Edge<T,I>> &result){
 				}
 			}
 			if(temp != n){
-				//Add code
-				I contains = G.contains(temp);
-				I target_id;
-				if( contains!=0){
-					target_id = contains;	
-					
-				}else{
-					target_id = G.get_next_id();
-					betacore::Node<I> target_node(target_id,temp);
-					G.add_node(target_node);
-				}
-				if(G.contains(node, target_id) || node ==target_id){
-					continue;
-				}else{
 				
-					//Get cost to node
-					T cst = cost(node,target_id);
-					//Add Edge
-					betacore::Edge<T,I> edge(node,target_id,cst);
-					G.add_edge(edge);
-					result.push_back(edge);	
-				}		
-				
+				vals.insert(temp);
 			}
 		
 		}
 	}
-	
+
+	for(auto temp : vals){
+		I contains = G.contains(temp);
+		I target_id;
+		if( contains!=0){
+			target_id = contains;	
+			
+		}else{
+			target_id = G.get_next_id();
+			betacore::Node<I> target_node(target_id,temp);
+			G.add_node(target_node);
+		}
+		if(G.contains(node, target_id) || node ==target_id){
+			std::cout<<"same:" << n << "::" << temp <<std::endl;
+		}else{		
+			//Get cost to node
+			T cst = cost(node,target_id);
+			//Add Edge
+			betacore::Edge<T,I> edge(node,target_id,cst);
+			G.add_edge(edge);
+			result.push_back(edge);	
+		}
+	}	
+
 }
 
 std::string make_source_string(int size){
@@ -203,6 +206,21 @@ int main (int argc, char * argv[]){
 			double cpu = (end_cpu - start_cpu) / (double)CLOCKS_PER_SEC ;
 			
 			std::cout<< "cpu time(includes std::cout):\t" <<cpu<<"s" << std::endl;
+
+
+			I mp = path[target_id];
+			std::cout<<"path:\n";				
+			std::cout<< G.get_node_name(target_id) <<"<-";
+			while (mp !=source_id){
+				if(!path.count(mp)){
+					std::cerr<<"Path from sink doesn't lead back to source" <<"\n";
+				
+				}
+				std::cout<< G.get_node_name(mp) <<"<-";
+				mp = path[mp];
+			}
+			std::cout<< source << "\n";
+		
 			//G.print();
 		}catch(const std::exception& e){
 			std::cout<<"Problem with algorithm" <<std::endl;

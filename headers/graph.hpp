@@ -45,7 +45,7 @@ namespace betacore{
 			betacore::Node<I> * source;
 			std::vector<I> targets;
 			std::map< std::string , I > node_names;
-			std::set<I> edges_hash;
+			std::set<long long> edges_hash;
 			I next_id;
 			void parse_line(std::string &line){
 				std::stringstream sstream(line);

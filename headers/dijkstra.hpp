@@ -66,29 +66,34 @@ namespace betacore{
 				return (a > b);
 			}
 	};
+	template<typename T, typename I>
+	class Order	{
+		public:
+		bool operator()(std::pair<T,I> const& a, std::pair<T,I> const& b) const
+		{
+			
+			return (a.first == b.first)? a.second < b.second : a.first > b.first;
+		}
+	};
 	//implement Dijkstra algorithm
 	template<typename T, typename I>
 	class Dijkstra{
 		private:			
-			std::priority_queue<std::pair<T,I>,std::vector<std::pair<T,I>>, std::greater<std::pair<T,I>> > frontier; // keeps track of priority
+			std::priority_queue<std::pair<T,I>,std::vector<std::pair<T,I>>, Order<T,I> > frontier; // keeps track of priority std::greater<std::pair<T,I>>
 			std::set<I> current; // keeps track of frontier
 			std::set<I> explored; // explored nodes
 			std::map<I,T> g;
 			std::map<I,I> _path;
 			std::function<T( I u, I ui)> cost;
 
-			void do_successor(I u, I ui, T _cost){
+			void do_successor(I u, I ui,T cst, T _cost){
 						// ui not in E and ui not in f
-						T new_cost = cost(u,ui);
+						T new_cost = cst;//cost(u,ui);
 						bool ex = explored.find(ui) != explored.end() ;
 						bool front = current.find(ui) != current.end();
 						if( !ex && !front )
 						{
-								g[ui]= g[u] +new_cost ;
-								if(g[ui]> _cost){ // if we have our goal then we see if any paths can be added 
-									return;
-								}
-								//frontier.push(ui);
+								g[ui]= g[u] +new_cost ;														
 								frontier.push(std::make_pair(g[ui],ui));
 								current.insert(ui);
 								_path[ui]=u;							
@@ -242,7 +247,7 @@ namespace betacore{
 				std::cout<< source << "\n";
 			}
 			
-						//
+			//
 			// Graph<T,I> &graph
 			// I &goal
 			//
@@ -257,23 +262,23 @@ namespace betacore{
 				this->cost = cost;
 				
 				I u;
+				I ui;
 				T _cost = (T) std::numeric_limits<T>::max();
-				frontier.push(std::make_pair(0,source));
+			
 				current.insert(source);
 				
 				g[source] =(T) cost(source,source);
+				frontier.push(std::make_pair(g[source],source));
 				I _goal = goal_v.at(0);
 				bool quit = false;
 				while(!frontier.empty()){
-
+					u = std::get<1>(frontier.top());
+					frontier.pop(); 
 					
-					u = std::get<1>(frontier.top()); // get next node
-					//std::cout<<"Node U::"<< u<<"\n";
-					frontier.pop(); // move remove the next from the que
-
 					if(current.find(u)!= current.end())
 						current.erase(current.find(u));
 					//if u is the goal is it has a smaller cost
+					if(goal_v.size() > 1)
 					for(auto goal : goal_v){
 						if( u == goal && g[goal]< _cost)
 						{
@@ -288,7 +293,7 @@ namespace betacore{
 					}
 
 					//this stop exploration (if positive only)
-					if(_cost< g[u] || quit){
+					if( u == _goal || _cost< g[u] || quit){
 						break;
 					}
 
@@ -306,9 +311,8 @@ namespace betacore{
 					Succ(u,successor);
 					//std::vector<std::thread> thread_list;
 					for ( auto s : successor ) {
-						I ui = s.get_target();//.get_id();
-					
-						do_successor(u,ui,_cost);
+						ui = s.get_target();					
+						do_successor(u,ui,s.get_cost() ,_cost);
 						// try{
 						// thread_list.push_back(std::thread(&betacore::Dijkstra<T,I>::do_successor,this,u,ui,_cost)); //,std::ref(path)
 						// }catch(const std::exception& e){
@@ -317,31 +321,12 @@ namespace betacore{
 					}
 					//join_all(thread_list);
 					//path = this->_path;
-					
+					if(frontier.empty()) std::cout<< "out of nodes" <<std::endl;
 				}//while(true);
-				 std::cout<< "explored node count:"<< explored.size() <<"\n";
-				// for(auto e: explored){
-				// 	std::cout<< "explored node:"<< e <<"\n";
-				// }
-				// std::cout<< "frontier node count:"<< current.size() <<"\n";
-				// for(auto c: current){
-				// 	std::cout<< "frontier node:"<< c <<"\n";
-				// }
-				u = _goal;
-				I mp = _path[u];
-				std::cout<<"path:\n";				
-				std::cout<< u <<"<-";
-				while (mp !=source){
-					if(!_path.count(mp)){
-						std::cerr<<"Path from sink doesn't lead back to source" <<"\n";
-						throw Dijkstra_Exception();
-					}
-					std::cout<< mp <<"<-";
-					mp = _path[mp];
-				}
-				std::cout<< source << "\n";
-				std::cout<<"cost:"<< g[u] <<"\n";
-
+				std::cout<< "explored node count:"<< explored.size() <<"\n";
+				std::cout<<"cost:"<< g[_goal] <<"\n";
+			
+				path= _path;
 			}
 
 			
