@@ -1,0 +1,793 @@
+\documentclass[12pt]{article}
+\usepackage[]{algorithm2e}
+\usepackage{ amssymb }
+\usepackage{amsmath}
+\usepackage[hyphens]{url}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=4,
+	language=C++,
+	captionpos=b,
+	tabsize=3,
+	frame=lines,
+	numbers=left,
+	numberstyle=\tiny,
+	numbersep=5pt,
+	breaklines=true,
+	showstringspaces=false,
+	basicstyle=\footnotesize,
+	%  identifierstyle=\color{magenta},
+	keywordstyle=\color[rgb]{0,0,1},
+	commentstyle=\color{Darkgreen},
+	stringstyle=\color{red}
+}
+
+\begin{document}
+
+\title{Project 02 CS-790}
+\author{Brandon Bluemner}
+\date{2017}
+\maketitle
+% //Start
+\begin{abstract}
+Analysis of c++11 implementation of A*'s algorithm. 
+\end{abstract}
+\section{implementation}*
+Random function 
+\begin{lstlisting}
+	std::random_device rd;
+	std::mt19937_64 e2(rd());
+	std::uniform_real_distribution<> dist(0, 2);
+\end{lstlisting}
+Random code using $c++$ implementation and uniform\_real\_distribution
+\cite{random}
+% //END
+\section{Sample Runs}
+Here is sample of running a solution size 2
+% ==============================================================
+% Sample Size 2
+% ==============================================================
+\begin{lstlisting}
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	ABEAB Nodes:1	AABBE
+	explored node count:7 cost:9
+	Running time(includes std::cout):	0.000368s
+	cpu start: 0	cpu end:0	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-AAEBB<-ABEAB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	ABEAB Nodes:1	AABBE
+	explored node count:7 cost:5
+	Running time(includes std::cout):	0.0004502s
+	cpu start: 0	cpu end:0	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-AAEBB<-ABEAB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BAAEB Nodes:1	AABBE
+	explored node count:7 cost:6
+	Running time(includes std::cout):	8.91e-05s
+	cpu start: 0	cpu end:0	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-BAABE<-BAAEB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BAAEB Nodes:1	AABBE
+	explored node count:7 cost:5
+	Running time(includes std::cout):	0.0001225s
+	cpu start: 0	cpu end:0	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-BAABE<-BAAEB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	ABBEA Nodes:1	AABBE
+	explored node count:7 cost:4
+	Running time(includes std::cout):	0.0001228s
+	cpu start: 0	cpu end:0	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-AABEB<-ABBEA
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	ABBEA Nodes:1	AABBE
+	explored node count:7 cost:6
+	Running time(includes std::cout):	0.000351s
+	cpu start: 0	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.015625s
+	path: AABBE<-AEBBA<-ABBEA
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BAAEB Nodes:1	AABBE
+	explored node count:8 cost:8
+	Running time(includes std::cout):	0.000258s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-BABAE<-BABEA<-BAAEB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BAAEB Nodes:1	AABBE
+	explored node count:15 cost:5
+	Running time(includes std::cout):	0.0001625s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-AABEB<-BAAEB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BBEAA Nodes:1	AABBE
+	out of nodes
+	explored node count:26 cost:5
+	Running time(includes std::cout):	6.96e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-ABEBA<-BBEAA
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BBEAA Nodes:1	AABBE
+	out of nodes
+	explored node count:26 cost:5
+	Running time(includes std::cout):	5.53e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-ABEBA<-BBEAA
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	ABEAB Nodes:1	AABBE
+	out of nodes
+	explored node count:26 cost:5
+	Running time(includes std::cout):	5.11e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-EBAAB<-ABEAB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	ABEAB Nodes:1	AABBE
+	out of nodes
+	explored node count:26 cost:5
+	Running time(includes std::cout):	7.33e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-EBAAB<-ABEAB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BABEA Nodes:1	AABBE
+	out of nodes
+	explored node count:26 cost:5
+	Running time(includes std::cout):	6.34e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-EABBA<-BABEA
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BABEA Nodes:1	AABBE
+	explored node count:26 cost:5
+	Running time(includes std::cout):	8.09e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-AABEB<-BABEA
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	AABEB Nodes:1	AABBE
+	explored node count:26 cost:2
+	Running time(includes std::cout):	5.17e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-AABEB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	AABEB Nodes:1	AABBE
+	explored node count:25 cost:0
+	Running time(includes std::cout):	4.36e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-AABEB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BBAEA Nodes:1	AABBE
+	out of nodes
+	explored node count:26 cost:0
+	Running time(includes std::cout):	8.47e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-BBAEA
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BBAEA Nodes:1	AABBE
+	out of nodes
+	explored node count:26 cost:0
+	Running time(includes std::cout):	4.94e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-BBAEA
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	AAEBB Nodes:1	AABBE
+	explored node count:26 cost:3
+	Running time(includes std::cout):	4.32e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-AAEBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	AAEBB Nodes:1	AABBE
+	explored node count:26 cost:1
+	Running time(includes std::cout):	4e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-AAEBB
+	_______________________________________________________________
+	Required Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	EBBAA Nodes:1	AABBE
+	Running A*
+	out of nodes
+	explored node count:26 cost:1
+	Running time(includes std::cout):	4.73e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-EBBAA
+	_______________________________________________________________
+	Required Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	EBBAA Nodes:1	AABBE
+	Running A*
+	out of nodes
+	explored node count:26 cost:1
+	Running time(includes std::cout):	4.68e-05s
+	cpu start: 15625	cpu end:15625	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path: AABBE<-EBBAA
+	_______________________________________________________________
+
+
+\end{lstlisting}
+% ==============================================================
+Here is sample of running a solution size 4
+% ==============================================================
+% Sample Size 4
+% ==============================================================
+\begin{lstlisting}
+	_______________________________________________________________
+	Heuristics
+	_______________________________________________________________
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	ABEAAABBB Nodes:1	AAAABBBBE
+	explored node count:125 cost:23
+	Running time(includes std::cout):	0.0733445s
+	cpu start: 0	cpu end:78125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.078125s
+	path:
+	AAAABBBBE<-AAAABEBBB<-AAEABABBB<-ABEAAABBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	ABEAAABBB Nodes:1	AAAABBBBE
+	explored node count:125 cost:18
+	Running time(includes std::cout):	0.0802328s
+	cpu start: 78125	cpu end:156250	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.078125s
+	path:
+	AAAABBBBE<-AAEABBBBA<-AAEABABBB<-ABEAAABBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	AAAEABBBB Nodes:1	AAAABBBBE
+	explored node count:123 cost:12
+	Running time(includes std::cout):	0.0005482s
+	cpu start: 156250	cpu end:156250	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-AAAAEBBBB<-AAAEABBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	AAAEABBBB Nodes:1	AAAABBBBE
+	explored node count:60 cost:9
+	Running time(includes std::cout):	0.0049137s
+	cpu start: 156250	cpu end:171875	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.015625s
+	path:
+	AAAABBBBE<-AAAAEBBBB<-AAAEABBBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BBAEAAABB Nodes:1	AAAABBBBE
+	explored node count:333 cost:23
+	Running time(includes std::cout):	0.409339s
+	cpu start: 171875	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.390625s
+	path:
+	AAAABBBBE<-BAAABABBE<-BAAAEABBB<-BBAEBAABA<-BBAEAAABB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BBAEAAABB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:23
+	Running time(includes std::cout):	0.0008063s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-<-<-BBAEBAABA<-BBAEAAABB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BAEAAABBB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:23
+	Running time(includes std::cout):	0.0002119s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-<-<-BAEABABAB<-BAEAAABBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BAEAAABBB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:23
+	Running time(includes std::cout):	0.0008756s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-<-AAEBBABAB<-BAEABABAB<-BAEAAABBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	ABEAAABBB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:23
+	Running time(includes std::cout):	0.0002156s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-<-<-ABEABABAB<-ABEAAABBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	ABEAAABBB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:23
+	Running time(includes std::cout):	0.000206s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-<-<-ABEABABAB<-ABEAAABBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BBBEAAAAB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:23
+	Running time(includes std::cout):	0.0002116s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-<-<-BBBBAAAAE<-BBBEAAAAB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BBBEAAAAB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:23
+	Running time(includes std::cout):	0.0002124s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-<-<-BBBBAAAAE<-BBBEAAAAB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	AAEAABBBB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:23
+	Running time(includes std::cout):	0.0002087s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-<-<-AAEBABBBA<-AAEAABBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	AAEAABBBB Nodes:1	AAAABBBBE
+	explored node count:626 cost:10
+	Running time(includes std::cout):	0.0019649s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-AAAAEBBBB<-AAEAABBBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	ABBEAAABB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:10
+	Running time(includes std::cout):	0.0002438s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-ABAEABABB<-ABBEAAABB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	ABBEAAABB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:10
+	Running time(includes std::cout):	0.0002104s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-ABAEABABB<-ABBEAAABB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	ABBEAAABB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:10
+	Running time(includes std::cout):	0.0003069s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-ABAEABABB<-ABBEAAABB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	ABBEAAABB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:10
+	Running time(includes std::cout):	0.0002207s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-ABAEABABB<-ABBEAAABB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	AABEAABBB Nodes:1	AAAABBBBE
+	out of nodes
+	explored node count:630 cost:10
+	Running time(includes std::cout):	0.0002116s
+	cpu start: 562500	cpu end:562500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-AAAEBABBB<-AABEAABBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	AABEAABBB Nodes:1	AAAABBBBE
+	explored node count:628 cost:17
+	Running time(includes std::cout):	0.0073547s
+	cpu start: 562500	cpu end:578125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.015625s
+	path:
+	AAAABBBBE<-AABAABBBE<-AABAAEBBB<-AABEAABBB
+	_______________________________________________________________
+	Required Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	EBBBBAAAA Nodes:1	AAAABBBBE
+	Running A*
+	out of nodes
+	explored node count:630 cost:17
+	Running time(includes std::cout):	0.0002221s
+	cpu start: 578125	cpu end:578125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-<-EBABBAABA<-EBBBBAAAA
+	_______________________________________________________________
+	Required Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	EBBBBAAAA Nodes:1	AAAABBBBE
+	Running A*
+	out of nodes
+	explored node count:630 cost:17
+	Running time(includes std::cout):	0.0002087s
+	cpu start: 578125	cpu end:578125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAABBBBE<-<-EBABBAABA<-EBBBBAAAA
+	_______________________________________________________________
+
+
+\end{lstlisting}
+% ==============================================================
+Here is sample of running a solution size 7
+% ==============================================================
+% Sample Size 7
+% ==============================================================
+\begin{lstlisting}
+	_______________________________________________________________
+	Heuristics
+	_______________________________________________________________
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	AABEAAAAABBBBBB Nodes:1	AAAAAAABBBBBBBE
+	explored node count:789 cost:36
+	Running time(includes std::cout):	13.7447s
+	cpu start: 0	cpu end:12953125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	12.9531s
+	path:
+	AAAAAAABBBBBBBE<-AAAAAAABEBBBBBB<-AAAEAAABABBBBBB<-AABEAAAAABBBBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	AABEAAAAABBBBBB Nodes:1	AAAAAAABBBBBBBE
+	explored node count:789 cost:31
+	Running time(includes std::cout):	19.0834s
+	cpu start: 12953125	cpu end:31187500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	18.2344s
+	path:
+	AAAAAAABBBBBBBE<-AAAAAAABEBBBBBB<-AAAEAAABABBBBBB<-AABEAAAAABBBBBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BBAEAAAAAABBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:8207 cost:31
+	Running time(includes std::cout):	0.0269566s
+	cpu start: 31187500	cpu end:31203125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.015625s
+	path:
+	AAAAAAABBBBBBBE<-<-BBBEAAAAAABBBAB<-BBAEAAAAAABBBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BBAEAAAAAABBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:8207 cost:31
+	Running time(includes std::cout):	0.105235s
+	cpu start: 31203125	cpu end:31312500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.109375s
+	path:
+	AAAAAAABBBBBBBE<-AAAEBAABABBBABB<-BBBEAAAAAABBBAB<-BBAEAAAAAABBBBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BBBEAAAAAAABBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:8207 cost:31
+	Running time(includes std::cout):	0.0015118s
+	cpu start: 31312500	cpu end:31312500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-BBAEAAABAAABBBB<-BBBEAAAAAAABBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BBBEAAAAAAABBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:8207 cost:31
+	Running time(includes std::cout):	0.001393s
+	cpu start: 31312500	cpu end:31312500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-BBAEAAABAAABBBB<-BBBEAAAAAAABBBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	AABEAAAAABBBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:8207 cost:31
+	Running time(includes std::cout):	0.0012134s
+	cpu start: 31312500	cpu end:31312500	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-AAAEAAABABBBBBB<-AABEAAAAABBBBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	AABEAAAAABBBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:8207 cost:31
+	Running time(includes std::cout):	0.0010941s
+	cpu start: 31328125	cpu end:31328125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-AAAEAAABABBBBBB<-AABEAAAAABBBBBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BBEAAAAAAABBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:8207 cost:31
+	Running time(includes std::cout):	0.0011009s
+	cpu start: 31328125	cpu end:31328125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-BBAAAAAEAABBBBB<-BBEAAAAAAABBBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BBEAAAAAAABBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:8207 cost:31
+	Running time(includes std::cout):	0.0011376s
+	cpu start: 31328125	cpu end:31328125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-BBAAAAAEAABBBBB<-BBEAAAAAAABBBBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	ABBEAAAAAABBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:8207 cost:31
+	Running time(includes std::cout):	0.0012339s
+	cpu start: 31328125	cpu end:31328125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-ABAEAAAABABBBBB<-ABBEAAAAAABBBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	ABBEAAAAAABBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:8207 cost:31
+	Running time(includes std::cout):	0.0025679s
+	cpu start: 31328125	cpu end:31328125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-ABAEAAAABABBBBB<-ABBEAAAAAABBBBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	AAAEAAAABBBBBBB Nodes:1	AAAAAAABBBBBBBE
+	explored node count:8188 cost:21
+	Running time(includes std::cout):	0.0377857s
+	cpu start: 31328125	cpu end:31359375	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.03125s
+	path:
+	AAAAAAABBBBBBBE<-AAAAAAAEBBBBBBB<-AAAEAAAABBBBBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	AAAEAAAABBBBBBB Nodes:1	AAAAAAABBBBBBBE
+	explored node count:7503 cost:18
+	Running time(includes std::cout):	0.258001s
+	cpu start: 31359375	cpu end:31609375	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.25s
+	path:
+	AAAAAAABBBBBBBE<-AAAAAAAEBBBBBBB<-AAAEAAAABBBBBBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BAEAAAAAABBBBBB Nodes:1	AAAAAAABBBBBBBE
+	explored node count:10352 cost:44
+	Running time(includes std::cout):	1196.59s
+	cpu start: 31609375	cpu end:1163218750	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	1131.61s
+	path:
+	AAAAAAABBBBBBBE<-AAABAAABABBBBBE<-AAABAAAEABBBBBB<-BABAAAAAABBBBBE<-BAEAAAAAABBBBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BAEAAAAAABBBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:37885 cost:44
+	Running time(includes std::cout):	0.351962s
+	cpu start: 1163218750	cpu end:1163578125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.359375s
+	path:
+	AAAAAAABBBBBBBE<-<-<-BABAAAAAABBBBBE<-BAEAAAAAABBBBBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	AABEAAAAABBBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:37885 cost:44
+	Running time(includes std::cout):	0.0058105s
+	cpu start: 1163578125	cpu end:1163578125	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-<-AABAAAAAEBBBBBB<-AABEAAAAABBBBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	AABEAAAAABBBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:37885 cost:44
+	Running time(includes std::cout):	0.0050555s
+	cpu start: 1163578125	cpu end:1163593750	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.015625s
+	path:
+	AAAAAAABBBBBBBE<-<-<-AABAAAAAEBBBBBB<-AABEAAAAABBBBBB
+	_______________________________________________________________
+	Random Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	BAEAAAAAABBBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:37885 cost:44
+	Running time(includes std::cout):	0.0060172s
+	cpu start: 1163593750	cpu end:1163593750	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-<-BABAAAAAABBBBBE<-BAEAAAAAABBBBBB
+	_______________________________________________________________
+	Random Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	BAEAAAAAABBBBBB Nodes:1	AAAAAAABBBBBBBE
+	out of nodes
+	explored node count:37885 cost:44
+	Running time(includes std::cout):	0.0047432s
+	cpu start: 1163593750	cpu end:1163609375	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0.015625s
+	path:
+	AAAAAAABBBBBBBE<-<-<-BABAAAAAABBBBBE<-BAEAAAAAABBBBBB
+	_______________________________________________________________
+	Required Start with Heuristics
+	_______________________________________________________________
+	Nodes:0	EBBBBBBBAAAAAAA Nodes:1	AAAAAAABBBBBBBE
+	Running A*
+	out of nodes
+	explored node count:37885 cost:44
+	Running time(includes std::cout):	0.0063251s
+	cpu start: 1163609375	cpu end:1163609375	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-<-EBABBBBBAAAAABA<-EBBBBBBBAAAAAAA
+	_______________________________________________________________
+	Required Start with out Heuristics
+	_______________________________________________________________
+	Nodes:0	EBBBBBBBAAAAAAA Nodes:1	AAAAAAABBBBBBBE
+	Running A*
+	out of nodes
+	explored node count:37885 cost:44
+	Running time(includes std::cout):	0.0053199s
+	cpu start: 1163609375	cpu end:1163609375	CLOCKS_PER_SEC:1000000
+	cpu time(includes std::cout):	0s
+	path:
+	AAAAAAABBBBBBBE<-<-<-EBABBBBBAAAAABA<-EBBBBBBBAAAAAAA
+	_______________________________________________________________
+\end{lstlisting}
+
+% ==============================================================
+\section{ Sources of Error}
+
+There is a Memory leak at higher numbers $7+$. 
+This is due to one of the data structures not releasing some memory.
+This can be shown via the $<-<-$ were the path became corrupted.
+
+An attempt was made to resolve this by modifying search to work multi-threaded 
+however this would run windows and yield a segmentation fault on linux, however the 
+path print out in the end would still be corrupted. 
+
+This issue was replicated on a server Intel(R) Xeon(R) CPU E5345  @ 2.33GHz 8GB Ubuntu.
+
+A better fix would be finding a function that was not as close to the lower bound. Also 
+encapsulating the data structures to handel larger states. Some of the $c++11$ structures
+that were being used have some issues with larger data set sizes and concurrency problems.
+
+Their was a few times that my h function did not yield an optimal solution, where optimal is not
+generating as many nodes, as shown in the results.*
+\bibliographystyle{unsrt}
+\bibliography{bib}
+
+\end{document}
+

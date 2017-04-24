@@ -412,23 +412,22 @@ int main (int argc, char * argv[]){
 	else
 	{
 		size= (unsigned int) std::stoi(argv[1]);
-		std::string a = make_random_string();
+		
 		
 		std::string source = make_source_string();
 		std::string target = make_goal_string();
 	
 		//Run A:
-		run_random_h(a,target);
-		G.clear();
-		run_random_0(a,target);
-		G.clear();
+		for(int i=0; i< 10;++i){	
+			std::string a = make_random_string();
+			run_random_h(a,target);
+			G.clear();
+			run_random_0(a,target);
+			G.clear();
+		}
 		required_run_h(source,target);
 		G.clear();
 		required_run_0(source,target);
-		//size = (unsigned int) word_size;
-
-	
-
 	}
 	
 	std::cout<<"_______________________________________________________________"<<std::endl;
